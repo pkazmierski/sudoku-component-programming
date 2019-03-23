@@ -12,7 +12,8 @@ public class SudokuBoardTest {
     private final int sizeOfSudoku = 9;
 
     /**
-     * Tests whether each value of sudoku board is valid according to sudoku rules
+     * Tests whether each value of sudoku board is valid according to sudoku
+     * rules
      */
     @Test
     public void testValidnessOfSudoku() {
@@ -20,25 +21,23 @@ public class SudokuBoardTest {
         sudokuBoard.fillBoard();
         for (int i = 0; i < sizeOfSudoku; i++)
             for (int j = 0; j < sizeOfSudoku; j++) {
-                assertTrue(sudokuBoard.canBePlaced(i, j, sudokuBoard.getValueAt(i, j)));
+                assertTrue(sudokuBoard.canBePlaced(i, j,
+                        sudokuBoard.getValueAt(i, j)));
             }
     }
 
     /**
-     * Tests whether two subsequent calls of fillBoard generates different digits layout on the board
+     * Tests whether two subsequent calls of fillBoard generates different
+     * digits layout on the board
      */
     @Test
     public void testRandomnessOfSudoku() {
         int counterSame = 0;
-        SudokuBoard sudokuBoard = new SudokuBoard();
-        sudokuBoard.fillBoard();
-        int[][] copy = sudokuBoard.getCopyOfBoard();
-        sudokuBoard.fillBoard();
-        for (int i = 0; i < sizeOfSudoku; i++)
-            for (int j = 0; j < sizeOfSudoku; j++)
-                if (copy[i][j] == sudokuBoard.getValueAt(i, j))
-                    counterSame++;
-
-        assertNotEquals(81, counterSame);
+        SudokuBoard sudokuBoard1 = new SudokuBoard();
+        SudokuBoard sudokuBoard2 = new SudokuBoard();
+        sudokuBoard1.fillBoard();
+        sudokuBoard2.fillBoard();
+        assertFalse(sudokuBoard1.equals(sudokuBoard2));
+        assertFalse(sudokuBoard2.equals(sudokuBoard1));
     }
 }
