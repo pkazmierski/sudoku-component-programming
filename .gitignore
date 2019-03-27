@@ -1,2 +1,4 @@
-
-Task2/Task2.iml
+*/target
+**.zip
+*/.idea
+**.iml
