@@ -1,19 +1,11 @@
 package pl.compprog;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-
 /**
  * Class representing a sudoku board.
  */
 public class SudokuBoard {
 
-    /**
-     * serves as a source to shuffled candidates arrays.
-     */
-    private static final ArrayList<Integer> CANDIDATES_SOURCE =
-            new ArrayList<Integer>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
+
     /**
      * Size of rectangle representing sudoku board.
      */
@@ -25,21 +17,26 @@ public class SudokuBoard {
     private int[][] board = new int[sizeOfSudoku][sizeOfSudoku];
 
     /**
-     * Array of values which can be placed,
-     * shuffling them introduces possibility of generating
-     * random sudoku boards.
-     */
-
-
-    /**
      * Gets the value from sudoku board at (row, column).
      *
      * @param row    row of the needed value
      * @param column column of the needed value
      * @return value at (row, column).
      */
-    public final int getValueAt(final int row, final int column) {
+    public final int get(final int row, final int column) {
         return board[row][column];
+    }
+
+
+    /**
+     * Sets the value from sudoku board at (row, column).
+     *
+     * @param row    row of the needed value
+     * @param column column of the needed value
+     * @param num new value at (row, column).
+     */
+    public final void set(final int row, final int column, final int num) {
+        board[row][column] = num;
     }
 
 
@@ -52,17 +49,66 @@ public class SudokuBoard {
         return board.clone();
     }
 
+
     /**
-     * Fills board with 0 and solve it.
+     * Transforms sudoku board into printable string of characters.
+     *
+     * @return returns string consisting of sudoku's values
      */
-    public final void fillBoard() {
+    @Override
+    public final String toString() {
+        String str = "";
         for (int i = 0; i < sizeOfSudoku; i++) {
             for (int j = 0; j < sizeOfSudoku; j++) {
-                board[i][j] = 0;
+                str += " " + ((Integer) board[i][j]).toString();
+            }
+
+            str += "\n";
+        }
+
+        return str + "\n";
+    }
+
+    /**
+     * Hashing function.
+     *
+     * @return returns unique identifier for each sudoku board
+     */
+    @Override
+    public final int hashCode() {
+        int sum = 0;
+        for (int i = 0; i < sizeOfSudoku; i++) {
+            for (int j = 0; j < sizeOfSudoku; j++) {
+                sum +=  (i * j + i) * board[i][j];
             }
         }
-        solve();
+        return sum;
     }
+
+    /**
+     * Checks whether two sudoku boards are identical.
+     *
+     * * @return true if so and false if not
+     */
+    @Override
+    public final boolean equals(final Object o) {
+        if (o == this) { //reference to itself
+            return true;
+        }
+        if (!(o instanceof SudokuBoard)) { //incompatible type
+            return false;
+        }
+        SudokuBoard sudokuBoard = (SudokuBoard) o;
+        for (int i = 0; i < sizeOfSudoku; i++) {
+            for (int j = 0; j < sizeOfSudoku; j++) {
+                if (board[i][j] != sudokuBoard.board[i][j]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 
     /**
      * Determines whether one can put such number
@@ -102,85 +148,20 @@ public class SudokuBoard {
     }
 
     /**
-     * Transforms sudoku board into printable string of characters.
-     *
-     * @return returns string consisting of sudoku's values
+     * Tests whether each value of sudoku board is valid according to sudoku
+     * rules.
+     * @return true if board is valid and false if not
      */
-    @Override
-    public final String toString() {
-        String str = "";
+    private boolean checkBoard() {
+
         for (int i = 0; i < sizeOfSudoku; i++) {
             for (int j = 0; j < sizeOfSudoku; j++) {
-                str += " " + ((Integer) board[i][j]).toString();
-            }
-
-            str += "\n";
-        }
-
-        return str + "\n";
-    }
-
-    @Override
-    public final int hashCode() {
-        int sum = 0;
-        for (int i = 0; i < sizeOfSudoku; i++) {
-            for (int j = 0; j < sizeOfSudoku; j++) {
-                sum += board[i][j];
-            }
-        }
-        return sum;
-    }
-
-    @Override
-    public final boolean equals(final Object o) {
-        if (o == this) { //reference to itself
-            return true;
-        }
-        if (!(o instanceof SudokuBoard)) { //incompatible type
-            return false;
-        }
-        SudokuBoard sudokuBoard = (SudokuBoard) o;
-        for (int i = 0; i < sizeOfSudoku; i++) {
-            for (int j = 0; j < sizeOfSudoku; j++) {
-                if (board[i][j] != sudokuBoard.board[i][j]) {
+                if (!canBePlaced(i, j, board[i][j])) {
                     return false;
                 }
             }
         }
         return true;
     }
-
-    /**
-     * Solves sudoku board according to sudoku rules-
-     * uses so called backtracking algorithm.
-     *
-     * @return returns boolean meaning grid is correct after this assignment
-     */
-    private boolean solve() {
-        for (int row = 0; row < sizeOfSudoku; row++) {
-            for (int col = 0; col < sizeOfSudoku; col++) {
-                if (board[row][col] == 0) {
-                    ArrayList<Integer> candidates =
-                            (ArrayList) CANDIDATES_SOURCE.clone();
-                    Collections.shuffle(candidates);
-                    for (int index = 0; index < candidates.size(); index++) {
-                        int number = candidates.get(index);
-                        if (canBePlaced(row, col, number)) {
-                            board[row][col] = number;
-
-                            if (solve()) {
-                                return true;
-                            } else {
-                                board[row][col] = 0;
-                            }
-                        }
-                    }
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
 
 }

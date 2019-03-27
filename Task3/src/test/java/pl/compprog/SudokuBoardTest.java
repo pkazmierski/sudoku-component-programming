@@ -18,11 +18,12 @@ public class SudokuBoardTest {
     @Test
     public void testValidnessOfSudoku() {
         SudokuBoard sudokuBoard = new SudokuBoard();
-        sudokuBoard.fillBoard();
+        SudokuSolver solver = new BactrackingSudokuSolver();
+        solver.solve(sudokuBoard);
         for (int i = 0; i < sizeOfSudoku; i++)
             for (int j = 0; j < sizeOfSudoku; j++) {
                 assertTrue(sudokuBoard.canBePlaced(i, j,
-                        sudokuBoard.getValueAt(i, j)));
+                        sudokuBoard.get(i, j)));
             }
     }
 
@@ -32,11 +33,11 @@ public class SudokuBoardTest {
      */
     @Test
     public void testRandomnessOfSudoku() {
-        int counterSame = 0;
         SudokuBoard sudokuBoard1 = new SudokuBoard();
         SudokuBoard sudokuBoard2 = new SudokuBoard();
-        sudokuBoard1.fillBoard();
-        sudokuBoard2.fillBoard();
+        SudokuSolver solver = new BactrackingSudokuSolver();
+        solver.solve(sudokuBoard1);
+        solver.solve(sudokuBoard2);
         assertFalse(sudokuBoard1.equals(sudokuBoard2));
         assertFalse(sudokuBoard2.equals(sudokuBoard1));
     }
