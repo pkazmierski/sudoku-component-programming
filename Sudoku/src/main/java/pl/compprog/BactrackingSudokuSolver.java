@@ -27,7 +27,7 @@ public class BactrackingSudokuSolver implements SudokuSolver {
     public final void solve(final SudokuBoard board) {
         for (int i = 0; i < sizeOfSudoku; i++) {
             for (int j = 0; j < sizeOfSudoku; j++) {
-                board.set(i, j, 0);
+                board.set(j, i, 0);
             }
         }
         fill(board);
@@ -42,19 +42,19 @@ public class BactrackingSudokuSolver implements SudokuSolver {
     private boolean fill(final SudokuBoard board) {
         for (int row = 0; row < sizeOfSudoku; row++) {
             for (int col = 0; col < sizeOfSudoku; col++) {
-                if (board.get(row, col) == 0) {
+                if (board.get(col, row) == 0) {
                     ArrayList<Integer> candidates =
                             (ArrayList) CANDIDATES_SOURCE.clone();
                     Collections.shuffle(candidates);
                     for (int index = 0; index < candidates.size(); index++) {
                         int number = candidates.get(index);
                         if (board.canBePlaced(row, col, number)) {
-                            board.set(row, col, number);
+                            board.set(col, row, number);
 
                             if (fill(board)) {
                                 return true;
                             } else {
-                                board.set(row, col, 0);
+                                board.set(col, row, 0);
                             }
                         }
                     }

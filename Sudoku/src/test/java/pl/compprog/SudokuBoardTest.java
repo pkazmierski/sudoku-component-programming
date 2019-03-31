@@ -20,12 +20,21 @@ public class SudokuBoardTest {
         SudokuBoard sudokuBoard = new SudokuBoard();
         SudokuSolver solver = new BactrackingSudokuSolver();
         solver.solve(sudokuBoard);
-        for (int i = 0; i < sizeOfSudoku; i++)
-            for (int j = 0; j < sizeOfSudoku; j++) {
-                assertTrue(sudokuBoard.canBePlaced(i, j,
-                        sudokuBoard.get(i, j)));
+        for (int y = 0; y < sizeOfSudoku; y++) {
+            assertTrue(sudokuBoard.getRow(y).verify());
+        }
+
+        for (int x = 0; x < sizeOfSudoku; x++) {
+            assertTrue(sudokuBoard.getRow(x).verify());
+        }
+
+        for (int y = 0; y < sizeOfSudoku; y++) {
+            for (int x = 0; x < sizeOfSudoku; x++) {
+                assertTrue(sudokuBoard.getBox(x, y).verify());
             }
+        }
     }
+    
 
     /**
      * Tests whether two subsequent calls of fillBoard generates different
