@@ -110,90 +110,14 @@ public class SudokuBoard {
     public final void set(final int x, final int y, final int value) {
         board[y][x].setFieldValue(value);
         if ((!(getRow(y).verify() && getColumn(x).verify()
-                && getBox(x, y).verify()) && value != 0) || value > 9 || value < 0) {
+                && getBox(x, y).verify()) && value != 0)
+                || value > SIZE_OF_SUDOKU || value < 0) {
             board[y][x].setFieldValue(0);
             throw new IllegalArgumentException(
                     "Cannot place the value " + value + " at " + x + ", " + y
                             + ".");
         }
     }
-
-
-    /**
-     * Copies the sudoku board to a newly allocated array.
-     *
-     * @return newly allocated copy of board
-     */
-    public final SudokuField[][] getCopyOfBoard() {
-        return board.clone();
-    }
-
-
-    /**
-     * Transforms sudoku board into printable string of characters.
-     *
-     * @return returns string consisting of sudoku's values
-     */
-    @Override
-    public final String toString() {
-        String str = "";
-        for (int i = 0; i < SIZE_OF_SUDOKU; i++) {
-            for (int j = 0; j < SIZE_OF_SUDOKU; j++) {
-                str += " " + ((Integer) board[i][j].getFieldValue()).toString();
-            }
-
-            str += "\n";
-        }
-
-        return str + "\n";
-    }
-
-    /**
-     * Hashing function.
-     *
-     * @return returns unique identifier for each sudoku board
-     */
-//    @Override
-//    public final int hashCode() {
-//        int sum = 0;
-//        for (int i = 0; i < SIZE_OF_SUDOKU; i++) {
-//            for (int j = 0; j < SIZE_OF_SUDOKU; j++) {
-//                sum += (i * j + i) * board[i][j].getFieldValue();
-//            }
-//        }
-//        return sum;
-//    }
-
-
-    @Override
-    public final int hashCode() {
-        return Arrays.hashCode(board);
-    }
-
-    /**
-     * Checks whether two sudoku boards are identical.
-     * <p>
-     * * @return true if so and false if not
-     */
-    @Override
-    public final boolean equals(final Object o) {
-        if (o == this) { //reference to itself
-            return true;
-        }
-        if (!(o instanceof SudokuBoard)) { //incompatible type
-            return false;
-        }
-        SudokuBoard sudokuBoard = (SudokuBoard) o;
-        for (int i = 0; i < SIZE_OF_SUDOKU; i++) {
-            for (int j = 0; j < SIZE_OF_SUDOKU; j++) {
-                if (board[i][j] != sudokuBoard.board[i][j]) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
 
     /**
      * Determines whether one can put such number
@@ -234,16 +158,79 @@ public class SudokuBoard {
     }
 
     /**
+     * Transforms sudoku board into printable string of characters.
+     *
+     * @return returns string consisting of sudoku's values
+     */
+    @Override
+    public final String toString() {
+        String str = "";
+        for (int i = 0; i < SIZE_OF_SUDOKU; i++) {
+            for (int j = 0; j < SIZE_OF_SUDOKU; j++) {
+                str += " " + ((Integer) board[i][j].getFieldValue()).toString();
+            }
+
+            str += "\n";
+        }
+
+        return str + "\n";
+    }
+
+    /**
+     * Hashing function.
+     *
+     * @return unique identifier for the current sudoku board
+     */
+    @Override
+    public final int hashCode() {
+        return Arrays.hashCode(board);
+    }
+
+    /**
+     * Checks whether two sudoku boards are identical.
+     *
+     * @return true if so and false if not
+     */
+    @Override
+    public final boolean equals(final Object o) {
+        if (o == this) { //reference to itself
+            return true;
+        }
+        if (!(o instanceof SudokuBoard)) { //incompatible type
+            return false;
+        }
+        SudokuBoard sudokuBoard = (SudokuBoard) o;
+        for (int i = 0; i < SIZE_OF_SUDOKU; i++) {
+            for (int j = 0; j < SIZE_OF_SUDOKU; j++) {
+                if (board[i][j] != sudokuBoard.board[i][j]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
      * Tests whether each value of sudoku board is valid according to sudoku
      * rules.
      *
      * @return true if board is valid and false if not
      */
     private boolean checkBoard() {
-
         for (int i = 0; i < SIZE_OF_SUDOKU; i++) {
-            for (int j = 0; j < SIZE_OF_SUDOKU; j++) {
-                if (!canBePlaced(i, j, board[i][j].getFieldValue())) {
+            if (!getRow(i).verify()) {
+                return false;
+            }
+        }
+        for (int i = 0; i < SIZE_OF_SUDOKU; i++) {
+            if (!getColumn(i).verify()) {
+                return false;
+            }
+        }
+        final int boxSide = 3;
+        for (int i = 0; i < SIZE_OF_SUDOKU; i += boxSide) {
+            for (int j = 0; j < SIZE_OF_SUDOKU; j += boxSide) {
+                if (!getBox(i, j).verify()) {
                     return false;
                 }
             }

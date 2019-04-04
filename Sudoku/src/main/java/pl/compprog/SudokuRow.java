@@ -3,37 +3,14 @@ package pl.compprog;
 /**
  * class representing a row in a sudoku board.
  */
-public class SudokuRow {
-    /**
-     * stores the fields that make up a row.
-     */
-    private SudokuField[] row;
-
+public class SudokuRow extends SudokuFieldGroup {
 
     /**
-     * assigns received array to the row array.
-     * @param c an array that should be made up of row fields
+     * assigns received array to the fields array.
+     *
+     * @param c an array that should be made up of sudoku fields
      */
-    public SudokuRow(final SudokuField[] c) {
-        if (c.length != SudokuBoard.SIZE_OF_SUDOKU) {
-            throw new IllegalArgumentException("Wrong length of the row.");
-        }
-        row = c;
-    }
-
-    /**
-     * verifies whether all the values in the row are unique.
-     * @return returns the result of the test
-     */
-    public final boolean verify() {
-        for (int i = 0; i < SudokuBoard.SIZE_OF_SUDOKU - 1; i++) {
-            for (int j = i + 1; j < SudokuBoard.SIZE_OF_SUDOKU; j++) {
-                if (row[i].getFieldValue() == row[j].getFieldValue()
-                        && row[i].getFieldValue() != 0) {
-                    return false;
-                }
-            }
-        }
-        return true;
+    public SudokuRow(final  SudokuField[] c) {
+        super(c);
     }
 }
