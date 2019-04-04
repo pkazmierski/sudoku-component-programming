@@ -29,10 +29,10 @@ public class SudokuBox {
      * @return returns the result of the test
      */
     public final boolean verify() {
-        for (int i = 0; i < SudokuBoard.SIZE_OF_SUDOKU; i++) {
-            for (int j = 0; j < SudokuBoard.SIZE_OF_SUDOKU; j++) {
+        for (int i = 0; i < SudokuBoard.SIZE_OF_SUDOKU - 1; i++) {
+            for (int j = i+1; j < SudokuBoard.SIZE_OF_SUDOKU; j++) {
                 if (box[i].getFieldValue() == box[j].getFieldValue()
-                        && i != j) {
+                        && box[i].getFieldValue() != 0) {
                     return false;
                 }
             }
