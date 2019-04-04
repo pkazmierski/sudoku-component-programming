@@ -21,9 +21,9 @@ public class SudokuField {
     /**
      * sets the value of the field.
      *
-     * @param value value to be assigned to the field
+     * @param inputValue value to be assigned to the field
      */
-    public final void setFieldValue(final int value) {
-        this.value = value;
+    public final void setFieldValue(final int inputValue) {
+        this.value = inputValue;
     }
 }

@@ -1,5 +1,7 @@
 package pl.compprog;
 
+import java.util.Arrays;
+
 /**
  * Class representing a sudoku board.
  */
@@ -151,15 +153,21 @@ public class SudokuBoard {
      *
      * @return returns unique identifier for each sudoku board
      */
+//    @Override
+//    public final int hashCode() {
+//        int sum = 0;
+//        for (int i = 0; i < SIZE_OF_SUDOKU; i++) {
+//            for (int j = 0; j < SIZE_OF_SUDOKU; j++) {
+//                sum += (i * j + i) * board[i][j].getFieldValue();
+//            }
+//        }
+//        return sum;
+//    }
+
+
     @Override
     public final int hashCode() {
-        int sum = 0;
-        for (int i = 0; i < SIZE_OF_SUDOKU; i++) {
-            for (int j = 0; j < SIZE_OF_SUDOKU; j++) {
-                sum += (i * j + i) * board[i][j].getFieldValue();
-            }
-        }
-        return sum;
+        return Arrays.hashCode(board);
     }
 
     /**
