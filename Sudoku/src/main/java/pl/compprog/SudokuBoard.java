@@ -109,8 +109,8 @@ public class SudokuBoard {
      */
     public final void set(final int x, final int y, final int value) {
         board[y][x].setFieldValue(value);
-        if (!(getRow(y).verify() && getColumn(x).verify()
-                && getBox(x, y).verify()) && value != 0) {
+        if ((!(getRow(y).verify() && getColumn(x).verify()
+                && getBox(x, y).verify()) && value != 0) || value > 9 || value < 0) {
             board[y][x].setFieldValue(0);
             throw new IllegalArgumentException(
                     "Cannot place the value " + value + " at " + x + ", " + y
