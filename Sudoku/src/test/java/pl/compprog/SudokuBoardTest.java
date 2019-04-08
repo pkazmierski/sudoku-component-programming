@@ -18,6 +18,7 @@ public class SudokuBoardTest {
     @Test
     public void testValidnessOfSudoku() {
         SudokuBoard sudokuBoard = new SudokuBoard();
+        System.out.println(sudokuBoard);
         SudokuSolver solver = new BactrackingSudokuSolver();
         solver.solve(sudokuBoard);
         for (int y = 0; y < sizeOfSudoku; y++) {
@@ -33,6 +34,7 @@ public class SudokuBoardTest {
                 assertTrue(sudokuBoard.getBox(x, y).verify());
             }
         }
+        System.out.println(sudokuBoard);
     }
     
 

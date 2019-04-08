@@ -1,5 +1,5 @@
 package pl.compprog;
-
+import java.util.List;
 import java.util.Arrays;
 
 /**
@@ -18,18 +18,33 @@ public class SudokuBoard {
     private final int fieldsInLineOfBox = 3;
 
     /**
-     * 2D array od integers representing sudoku board.
-     * First field is y (row number), the second one is x (column number).
+     * Fixed size list of SudokuField representing sudoku board.
      */
-    private SudokuField[][] board =
-            new SudokuField[SIZE_OF_SUDOKU][SIZE_OF_SUDOKU];
+    private List<SudokuField> board =
+            Arrays.asList(new SudokuField[SIZE_OF_SUDOKU * SIZE_OF_SUDOKU]);
+
 
     {
         for (int i = 0; i < SIZE_OF_SUDOKU; i++) {
             for (int j = 0; j < SIZE_OF_SUDOKU; j++) {
-                board[i][j] = new SudokuField();
+                board.set(i * SIZE_OF_SUDOKU + j, new SudokuField());
             }
         }
+    }
+
+    /**
+     * Gets the field from sudoku board at (row, column).
+     *
+     * @param y row of the needed field
+     * @param x column of the needed field
+     * @return field at (row, column).
+     */
+    private SudokuField getFieldAt(final int x, final int y) {
+        if (x < 0 || y < 0 || x >= SIZE_OF_SUDOKU || y >= SIZE_OF_SUDOKU) {
+            throw new IllegalArgumentException("Cannot access " + x + " "
+                    + y);
+        }
+        return board.get(y * SIZE_OF_SUDOKU + x);
     }
 
     /**
@@ -39,7 +54,11 @@ public class SudokuBoard {
      * @return SudokuRow object containing a row of SudokuFields
      */
     public final SudokuRow getRow(final int y) {
-        return new SudokuRow(board[y]);
+        SudokuField[] row = new SudokuField[SIZE_OF_SUDOKU];
+        for (int i = 0; i < SIZE_OF_SUDOKU; i++) {
+            row[i] = getFieldAt(i, y);
+        }
+        return new SudokuRow(row);
     }
 
 
@@ -52,7 +71,7 @@ public class SudokuBoard {
     public final SudokuColumn getColumn(final int x) {
         SudokuField[] col = new SudokuField[SIZE_OF_SUDOKU];
         for (int i = 0; i < SIZE_OF_SUDOKU; i++) {
-            col[i] = board[i][x];
+            col[i] = getFieldAt(x, i);
         }
         return new SudokuColumn(col);
     }
@@ -82,7 +101,7 @@ public class SudokuBoard {
         int newY = getLeftBoxCorner(y);
         for (int i = 0; i < fieldsInLineOfBox; i++) {
             for (int j = 0; j < fieldsInLineOfBox; j++) {
-                box[i * fieldsInLineOfBox + j] = board[i + newY][j + newX];
+                box[i * fieldsInLineOfBox + j] = getFieldAt(j + newX, i + newY);
             }
         }
         return new SudokuBox(box);
@@ -96,7 +115,7 @@ public class SudokuBoard {
      * @return value at (row, column).
      */
     public final int get(final int x, final int y) {
-        return board[y][x].getFieldValue();
+        return getFieldAt(x, y).getFieldValue();
     }
 
 
@@ -108,16 +127,17 @@ public class SudokuBoard {
      * @param value new value at (row, column).
      */
     public final void set(final int x, final int y, final int value) {
-        board[y][x].setFieldValue(value);
+        getFieldAt(x, y).setFieldValue(value);
         if ((!(getRow(y).verify() && getColumn(x).verify()
                 && getBox(x, y).verify()) && value != 0)
                 || value > SIZE_OF_SUDOKU || value < 0) {
-            board[y][x].setFieldValue(0);
+            getFieldAt(x, y).setFieldValue(0);
             throw new IllegalArgumentException(
                     "Cannot place the value " + value + " at " + x + ", " + y
                             + ".");
         }
     }
+
 
     /**
      * Determines whether one can put such number
@@ -131,12 +151,12 @@ public class SudokuBoard {
     public final boolean canBePlaced(final int row, final int col,
                                      final int num) {
         for (int i = 0; i < SIZE_OF_SUDOKU; i++) {
-            if (row != i && board[i][col].getFieldValue() == num) {
+            if (row != i && getFieldAt(col, i).getFieldValue() == num) {
                 return false;
             }
         }
         for (int j = 0; j < SIZE_OF_SUDOKU; j++) {
-            if (col != j && board[row][j].getFieldValue() == num) {
+            if (col != j && getFieldAt(j, row).getFieldValue() == num) {
                 return false;
             }
         }
@@ -149,7 +169,7 @@ public class SudokuBoard {
         for (int i = r; i < r + sqrtOfSize; i++) {
             for (int j = c; j < c + sqrtOfSize; j++) {
                 if (row != i && col != j
-                        && board[i][j].getFieldValue() == num) {
+                        && getFieldAt(j, i).getFieldValue() == num) {
                     return false;
                 }
             }
@@ -167,7 +187,7 @@ public class SudokuBoard {
         String str = "";
         for (int i = 0; i < SIZE_OF_SUDOKU; i++) {
             for (int j = 0; j < SIZE_OF_SUDOKU; j++) {
-                str += " " + ((Integer) board[i][j].getFieldValue()).toString();
+                str += " " + ((Integer) getFieldAt(j, i).getFieldValue()).toString();
             }
 
             str += "\n";
@@ -183,7 +203,7 @@ public class SudokuBoard {
      */
     @Override
     public final int hashCode() {
-        return Arrays.hashCode(board);
+        return board.hashCode();
     }
 
     /**
@@ -202,7 +222,7 @@ public class SudokuBoard {
         SudokuBoard sudokuBoard = (SudokuBoard) o;
         for (int i = 0; i < SIZE_OF_SUDOKU; i++) {
             for (int j = 0; j < SIZE_OF_SUDOKU; j++) {
-                if (board[i][j] != sudokuBoard.board[i][j]) {
+                if (getFieldAt(j, i) != sudokuBoard.getFieldAt(j, i)) {
                     return false;
                 }
             }
