@@ -1,4 +1,5 @@
 package pl.compprog;
+
 import java.util.List;
 import java.util.Arrays;
 
@@ -187,7 +188,8 @@ public class SudokuBoard {
         String str = "";
         for (int i = 0; i < SIZE_OF_SUDOKU; i++) {
             for (int j = 0; j < SIZE_OF_SUDOKU; j++) {
-                str += " " + ((Integer) getFieldAt(j, i).getFieldValue()).toString();
+                str += " " + ((Integer) getFieldAt(j, i).getFieldValue())
+                        .toString();
             }
 
             str += "\n";
