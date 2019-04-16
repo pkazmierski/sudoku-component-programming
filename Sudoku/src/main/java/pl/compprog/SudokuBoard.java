@@ -3,6 +3,8 @@ package pl.compprog;
 import java.util.List;
 import java.util.Arrays;
 
+import org.apache.commons.lang3.builder.*;
+
 /**
  * Class representing a sudoku board.
  */
@@ -179,33 +181,28 @@ public class SudokuBoard {
     }
 
     /**
-     * Transforms sudoku board into printable string of characters.
+     * Transforms sudoku board into printable string of characters. Uses
+     * apache commons-langs3.
      *
      * @return returns string consisting of sudoku's values
      */
     @Override
     public final String toString() {
-        String str = "";
-        for (int i = 0; i < SIZE_OF_SUDOKU; i++) {
-            for (int j = 0; j < SIZE_OF_SUDOKU; j++) {
-                str += " " + ((Integer) getFieldAt(j, i).getFieldValue())
-                        .toString();
-            }
-
-            str += "\n";
-        }
-
-        return str + "\n";
+        return new ToStringBuilder(this).
+                append(board).
+                toString();
     }
 
     /**
-     * Hashing function.
+     * Hashing function. Uses apache commons-langs3.
      *
      * @return unique identifier for the current sudoku board
      */
     @Override
     public final int hashCode() {
-        return board.hashCode();
+        return new HashCodeBuilder(17, 37).
+                append(board).
+                toHashCode();
     }
 
     /**
@@ -214,22 +211,21 @@ public class SudokuBoard {
      * @return true if so and false if not
      */
     @Override
-    public final boolean equals(final Object o) {
-        if (o == this) { //reference to itself
-            return true;
-        }
-        if (!(o instanceof SudokuBoard)) { //incompatible type
+    public final boolean equals(final Object obj) {
+        if (obj == null) {
             return false;
         }
-        SudokuBoard sudokuBoard = (SudokuBoard) o;
-        for (int i = 0; i < SIZE_OF_SUDOKU; i++) {
-            for (int j = 0; j < SIZE_OF_SUDOKU; j++) {
-                if (getFieldAt(j, i) != sudokuBoard.getFieldAt(j, i)) {
-                    return false;
-                }
-            }
+        if (obj == this) {
+            return true;
         }
-        return true;
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        SudokuBoard rhs = (SudokuBoard) obj;
+        return new EqualsBuilder().
+                appendSuper(super.equals(obj)).
+                append(board, rhs.board).
+                isEquals();
     }
 
     /**

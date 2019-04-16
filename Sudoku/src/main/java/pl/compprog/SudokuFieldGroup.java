@@ -2,6 +2,7 @@ package pl.compprog;
 
 import java.util.Arrays;
 import java.util.List;
+import org.apache.commons.lang3.builder.*;
 
 /**
  * abstract class for storing and verifying groups of SudokuBoard fields, for
@@ -43,5 +44,53 @@ public abstract class SudokuFieldGroup {
             }
         }
         return true;
+    }
+
+    /**
+     * Transforms sudoku field group into printable string of characters. Uses
+     * apache commons-langs3.
+     *
+     * @return returns string consisting of sudoku's values
+     */
+    @Override
+    public final String toString() {
+        return new ToStringBuilder(this).
+                append(fields).
+                toString();
+    }
+
+    /**
+     * Hashing function. Uses apache commons-langs3.
+     *
+     * @return unique identifier for the current sudoku board
+     */
+    @Override
+    public final int hashCode() {
+        return new HashCodeBuilder(9, 49).
+                append(fields).
+                toHashCode();
+    }
+
+    /**
+     * Checks whether two sudoku field groups are identical.
+     *
+     * @return true if so and false if not
+     */
+    @Override
+    public final boolean equals(final Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        SudokuFieldGroup rhs = (SudokuFieldGroup) obj;
+        return new EqualsBuilder().
+                appendSuper(super.equals(obj)).
+                append(fields, rhs.fields).
+                isEquals();
     }
 }
