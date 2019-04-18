@@ -2,7 +2,9 @@ package pl.compprog;
 
 import java.util.Arrays;
 import java.util.List;
-import org.apache.commons.lang3.builder.*;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * abstract class for storing and verifying groups of SudokuBoard fields, for
@@ -14,6 +16,16 @@ public abstract class SudokuFieldGroup {
      */
     private List<SudokuField> fields;
 
+    /**
+     * First parameter for HashCodeBuilder. Must be a non zero odd number.
+     * Should not be the same as in other classes.
+     */
+    private static final int HASH_CODE_INITIAL = 3;
+    /**
+     * Second parameter for HashCodeBuilder. Must be a non zero odd number.
+     * Should not be the same as in other classes.
+     */
+    private static final int HASH_CODE_MULTIPLIER = 43;
 
     /**
      * assigns received array to the fields list.
@@ -66,7 +78,7 @@ public abstract class SudokuFieldGroup {
      */
     @Override
     public final int hashCode() {
-        return new HashCodeBuilder(9, 49).
+        return new HashCodeBuilder(HASH_CODE_INITIAL, HASH_CODE_MULTIPLIER).
                 append(fields).
                 toHashCode();
     }
@@ -89,7 +101,6 @@ public abstract class SudokuFieldGroup {
         }
         SudokuFieldGroup rhs = (SudokuFieldGroup) obj;
         return new EqualsBuilder().
-                appendSuper(super.equals(obj)).
                 append(fields, rhs.fields).
                 isEquals();
     }

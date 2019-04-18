@@ -3,7 +3,9 @@ package pl.compprog;
 import java.util.List;
 import java.util.Arrays;
 
-import org.apache.commons.lang3.builder.*;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * Class representing a sudoku board.
@@ -13,6 +15,16 @@ public class SudokuBoard {
      * Size of rectangle representing sudoku board.
      */
     public static final int SIZE_OF_SUDOKU = 9;
+    /**
+     * First parameter for HashCodeBuilder. Must be a non zero odd number.
+     * Should not be the same as in other classes.
+     */
+    private static final int HASH_CODE_INITIAL = 17;
+    /**
+     * Second parameter for HashCodeBuilder. Must be a non zero odd number.
+     * Should not be the same as in other classes.
+     */
+    private static final int HASH_CODE_MULTIPLIER = 37;
 
     /**
      * Number of fields in a line (vertical or horizontal / row or column) in a
@@ -200,7 +212,7 @@ public class SudokuBoard {
      */
     @Override
     public final int hashCode() {
-        return new HashCodeBuilder(17, 37).
+        return new HashCodeBuilder(HASH_CODE_INITIAL, HASH_CODE_MULTIPLIER).
                 append(board).
                 toHashCode();
     }
@@ -223,7 +235,6 @@ public class SudokuBoard {
         }
         SudokuBoard rhs = (SudokuBoard) obj;
         return new EqualsBuilder().
-                appendSuper(super.equals(obj)).
                 append(board, rhs.board).
                 isEquals();
     }

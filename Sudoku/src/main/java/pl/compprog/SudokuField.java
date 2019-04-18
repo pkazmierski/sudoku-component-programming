@@ -14,6 +14,17 @@ public class SudokuField {
     private int value = 0;
 
     /**
+     * First parameter for HashCodeBuilder. Must be a non zero odd number.
+     * Should not be the same as in other classes.
+     */
+    private static final int HASH_CODE_INITIAL = 9;
+    /**
+     * Second parameter for HashCodeBuilder. Must be a non zero odd number.
+     * Should not be the same as in other classes.
+     */
+    private static final int HASH_CODE_MULTIPLIER = 49;
+
+    /**
      * returns the value of the field.
      *
      * @return returns the value of the field
@@ -51,7 +62,7 @@ public class SudokuField {
      */
     @Override
     public final int hashCode() {
-        return new HashCodeBuilder(3, 43).
+        return new HashCodeBuilder(HASH_CODE_INITIAL, HASH_CODE_MULTIPLIER).
                 append(value).
                 toHashCode();
     }
@@ -74,7 +85,6 @@ public class SudokuField {
         }
         SudokuField rhs = (SudokuField) obj;
         return new EqualsBuilder().
-                appendSuper(super.equals(obj)).
                 append(value, rhs.value).
                 isEquals();
     }
