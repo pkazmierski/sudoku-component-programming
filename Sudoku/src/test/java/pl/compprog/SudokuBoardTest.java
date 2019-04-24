@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
 /**
  * Class used to test whether sudoku board was properly generated.
  */
@@ -51,4 +53,28 @@ public class SudokuBoardTest {
         solver.solve(sudokuBoard2);
         assertNotEquals(sudokuBoard1, sudokuBoard2);
     }
+
+    /**
+     * Tests whether sudokuBoard written to and read from the file
+     * is the same
+     */
+    @Test
+    public void readAndWriteFileTest()
+    {
+        SudokuBoard sudokuBoard1 = new SudokuBoard();
+        SudokuSolver solver = new BactrackingSudokuSolver();
+        solver.solve(sudokuBoard1);
+        System.out.println(sudokuBoard1);
+        SudokuBoardDaoFactory sudokuBoardDaoFactory = new SudokuBoardDaoFactory();
+        try(FileSudokuBoardDao dao = (FileSudokuBoardDao) sudokuBoardDaoFactory.getFileDao("sudoku.ser")) {
+            dao.write(sudokuBoard1);
+            SudokuBoard sudokuBoard2 = dao.read();
+            assertEquals(sudokuBoard1, sudokuBoard2);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

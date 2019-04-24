@@ -1,5 +1,6 @@
 package pl.compprog;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Arrays;
 
@@ -10,7 +11,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 /**
  * Class representing a sudoku board.
  */
-public class SudokuBoard {
+public class SudokuBoard implements Serializable {
     /**
      * Size of rectangle representing sudoku board.
      */
@@ -31,6 +32,8 @@ public class SudokuBoard {
      * box (subgrid).
      */
     private final int fieldsInLineOfBox = 3;
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * Fixed size list of SudokuField representing sudoku board.
