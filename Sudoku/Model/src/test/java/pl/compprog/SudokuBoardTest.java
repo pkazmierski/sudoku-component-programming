@@ -1,10 +1,7 @@
 package pl.compprog;
 
 import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
 
 /**
  * Class used to test whether sudoku board was properly generated.
