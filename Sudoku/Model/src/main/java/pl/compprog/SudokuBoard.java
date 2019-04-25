@@ -1,6 +1,6 @@
 package pl.compprog;
 
-import java.io.Serializable;
+import java.io.*;
 import java.util.List;
 import java.util.Arrays;
 
@@ -57,7 +57,7 @@ public class SudokuBoard implements Serializable {
      * @param x column of the needed field
      * @return field at (row, column).
      */
-    private SudokuField getFieldAt(final int x, final int y) {
+    public SudokuField getFieldAt(final int x, final int y) {
         if (x < 0 || y < 0 || x >= SIZE_OF_SUDOKU || y >= SIZE_OF_SUDOKU) {
             throw new IllegalArgumentException("Cannot access " + x + " "
                     + y);
@@ -268,5 +268,29 @@ public class SudokuBoard implements Serializable {
             }
         }
         return true;
+    }
+
+
+    @Override
+    public  final SudokuBoard clone() {
+        byte[] object;
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+             ObjectOutputStream oos = new ObjectOutputStream(baos);) {
+            oos.writeObject(this);
+            object = baos.toByteArray();
+
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            return null;
+        }
+
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(object);
+             ObjectInputStream ois = new ObjectInputStream(bais);) {
+            SudokuBoard clone = (SudokuBoard) ois.readObject();
+            return (SudokuBoard) clone;
+        } catch (IOException | ClassNotFoundException cnfe) {
+            cnfe.printStackTrace();
+            return null;
+        }
     }
 }

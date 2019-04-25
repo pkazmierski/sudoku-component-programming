@@ -73,5 +73,21 @@ public class SudokuBoardTest {
         }
     }
 
+    /**
+     * Tests whether cloned sudokuBoard is not the
+     * same board as the previous one
+     */
+    @Test
+    public void cloneTest()
+    {
+        SudokuBoard sudokuBoard1 = new SudokuBoard();
+        SudokuSolver solver = new BactrackingSudokuSolver();
+        solver.solve(sudokuBoard1);
+        SudokuBoard sudokuBoard2 = sudokuBoard1.clone();
+        assertNotSame(sudokuBoard1, sudokuBoard2);
+        assertNotSame(sudokuBoard1.getFieldAt(0, 0), sudokuBoard2.getFieldAt(0, 0));
+        assertEquals(sudokuBoard1, sudokuBoard2);
+        assertEquals(sudokuBoard1.getFieldAt(0, 0), sudokuBoard2.getFieldAt(0, 0));
+    }
 
 }

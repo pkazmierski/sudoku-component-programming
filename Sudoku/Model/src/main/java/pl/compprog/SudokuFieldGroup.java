@@ -1,5 +1,6 @@
 package pl.compprog;
 
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -10,7 +11,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * abstract class for storing and verifying groups of SudokuBoard fields, for
  * example boxes, fields or columns.
  */
-public abstract class SudokuFieldGroup {
+public abstract class SudokuFieldGroup implements Serializable, Cloneable {
     /**
      * stores the fields that make up a field group.
      */
@@ -104,4 +105,30 @@ public abstract class SudokuFieldGroup {
                 append(fields, rhs.fields).
                 isEquals();
     }
+
+    @Override
+    public  final SudokuFieldGroup clone() {
+        byte[] object;
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+             ObjectOutputStream oos = new ObjectOutputStream(baos);) {
+            oos.writeObject(this);
+            object = baos.toByteArray();
+
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            return null;
+        }
+
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(object);
+             ObjectInputStream ois = new ObjectInputStream(bais);) {
+
+            SudokuFieldGroup clone = (SudokuFieldGroup) ois.readObject();
+            return (SudokuFieldGroup) clone;
+        } catch (IOException | ClassNotFoundException cnfe) {
+            cnfe.printStackTrace();
+            return null;
+        }
+    }
 }
+
+

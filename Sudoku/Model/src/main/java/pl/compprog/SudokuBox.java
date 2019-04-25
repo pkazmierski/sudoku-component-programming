@@ -1,5 +1,7 @@
 package pl.compprog;
 
+import java.io.Serializable;
+
 /**
  * class representing a 3x3 grid of fields (subgrid) called box.
  */

@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * stores one sudoku field and allows to set and get it's value.
  */
-public class SudokuField implements Serializable {
+public class SudokuField implements Serializable, Comparable<SudokuField> {
 
     private static final long serialVersionUID = 2L;
     /**
@@ -91,5 +91,10 @@ public class SudokuField implements Serializable {
         return new EqualsBuilder().
                 append(value, rhs.value).
                 isEquals();
+    }
+
+    @Override
+    public int compareTo(final SudokuField o) {
+        return ((Integer)value).compareTo((o.value));
     }
 }
