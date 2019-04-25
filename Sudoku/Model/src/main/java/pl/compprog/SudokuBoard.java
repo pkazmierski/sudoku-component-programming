@@ -152,7 +152,7 @@ public class SudokuBoard implements Serializable {
             getFieldAt(x, y).setFieldValue(0);
             throw new IllegalArgumentException(
                     "Cannot place the value " + value + " at " + x + ", " + y
-                            + ".");
+                            + "");
         }
     }
 

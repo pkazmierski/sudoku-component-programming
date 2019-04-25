@@ -4,8 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>cp.gr01</groupId>
-    <artifactId>Sudoku</artifactId>
+    <groupId>pl.comp</groupId>
+    <artifactId>SudokuGameProject</artifactId>
+    <packaging>pom</packaging>
     <version>3.0-SNAPSHOT</version>
 
     <developers>
@@ -94,6 +95,11 @@
             </plugin>
         </plugins>
     </build>
+    <modules>
+        <module>Model</module>
+        <module>View</module>
+        <module>Libs</module>
+    </modules>
 
     <reporting>
         <plugins>
@@ -151,8 +157,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.11</maven.compiler.source>
-        <maven.compiler.target>1.11</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
 </project>
