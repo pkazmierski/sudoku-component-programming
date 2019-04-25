@@ -16,7 +16,7 @@ public class FileSudokuBoardDao implements Dao<SudokuBoard>, AutoCloseable {
     /**
      * Name of processed file.
      */
-    private String filename;
+    private final String filename;
 
     /**
      * FileOutputStream object used to write
@@ -59,14 +59,12 @@ public class FileSudokuBoardDao implements Dao<SudokuBoard>, AutoCloseable {
      *@return SudokuBoard object read form the file
      */
     @Override
-    public final SudokuBoard read() throws IOException, ClassNotFoundException {
+    public final SudokuBoard read() throws Exception {
 
-        try (FileInputStream fis = new FileInputStream(filename);
-        ObjectInputStream ois = new ObjectInputStream(fis)) {
-            this.fis = fis;
-            this.ois = ois;
-            return (SudokuBoard) ois.readObject();
-        }
+        fis = new FileInputStream(filename);
+        ois = new ObjectInputStream(fis);
+        return (SudokuBoard) ois.readObject();
+
 
     }
 
@@ -76,7 +74,7 @@ public class FileSudokuBoardDao implements Dao<SudokuBoard>, AutoCloseable {
      * @param obj SudokuBoard object to be written
      */
     @Override
-    public final void write(final SudokuBoard obj) throws IOException {
+    public final void write(final SudokuBoard obj) throws Exception {
         File file = new File(filename);
         fos = new FileOutputStream(file);
         oos = new ObjectOutputStream(fos);
