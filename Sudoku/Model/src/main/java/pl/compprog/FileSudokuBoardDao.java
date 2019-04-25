@@ -42,7 +42,6 @@ public class FileSudokuBoardDao implements Dao<SudokuBoard>, AutoCloseable {
      */
     private ObjectInputStream ois;
 
-
     /**
      * FileSudokuBoardDao constructor.
      *
@@ -78,14 +77,10 @@ public class FileSudokuBoardDao implements Dao<SudokuBoard>, AutoCloseable {
      */
     @Override
     public final void write(final SudokuBoard obj) throws IOException {
-
         File file = new File(filename);
-        try (FileOutputStream fos = new FileOutputStream(file);
-             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-            this.fos = fos;
-            this.oos = oos;
-            oos.writeObject(obj);
-        }
+        fos = new FileOutputStream(file);
+        oos = new ObjectOutputStream(fos);
+        oos.writeObject(obj);
     }
 
     /**
@@ -105,4 +100,16 @@ public class FileSudokuBoardDao implements Dao<SudokuBoard>, AutoCloseable {
             ois.close();
         }
     }
+
+    /**
+     * Overriden finalize method
+     * to be sure that all used
+     * resources are closed.
+     */
+    @Override
+    public final void finalize() throws Exception {
+
+       close();
+    }
+
 }
