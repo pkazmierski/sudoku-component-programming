@@ -126,7 +126,7 @@ public class SudokuBoard implements Serializable {
     }
 
     /**
-     * Gets the value from sudoku board at (row, column).
+     * Gets the integer value from sudoku board at (row, column).
      *
      * @param y row of the needed value
      * @param x column of the needed value
@@ -203,9 +203,23 @@ public class SudokuBoard implements Serializable {
      */
     @Override
     public final String toString() {
-        return new ToStringBuilder(this).
-                append(board).
-                toString();
+        var tsb = new ToStringBuilder(this);
+        for(int i = 0; i < SIZE_OF_SUDOKU; i++) {
+            tsb.append(getRow(i));
+            tsb.append('\n');
+        }
+        return tsb.toString();
+    }
+    
+    
+    public final void print() {
+        for(int i = 0; i < SIZE_OF_SUDOKU; i++) {
+            for(int j = 0; j < SIZE_OF_SUDOKU; j++) {
+                System.out.print(this.get(j,i));
+                System.out.print(" ");
+            }
+            System.out.println("");
+        }
     }
 
     /**
@@ -248,7 +262,12 @@ public class SudokuBoard implements Serializable {
      *
      * @return true if board is valid and false if not
      */
-    private boolean checkBoard() {
+    public boolean checkBoard() {
+        for(int i = 0; i <  SIZE_OF_SUDOKU * SIZE_OF_SUDOKU; i++) {
+            if(board.get(i).getFieldValue() == 0) {
+                return false;
+            }
+        }
         for (int i = 0; i < SIZE_OF_SUDOKU; i++) {
             if (!getRow(i).verify()) {
                 return false;

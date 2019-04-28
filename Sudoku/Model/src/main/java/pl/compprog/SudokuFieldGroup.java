@@ -40,6 +40,10 @@ public abstract class SudokuFieldGroup implements Serializable, Cloneable {
         }
         fields = Arrays.asList(c);
     }
+    
+//    public SudokuField get(int index) {
+//        return fields.get(index);
+//    }
 
     /**
      * verifies whether all the values in the fields are unique.

@@ -1,6 +1,8 @@
 package pl.compprog;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.apache.commons.lang3.builder.Diff;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -33,7 +35,12 @@ public class SudokuBoardTest {
                 assertTrue(sudokuBoard.getBox(x, y).verify());
             }
         }
-        System.out.println(sudokuBoard);
+        Difficulty d = new DifficultyNormal();
+        d.prepareBoard(sudokuBoard);
+        System.out.println("============================");
+        sudokuBoard.print();
+        System.out.println("============================");
+        //System.out.println(sudokuBoard);
     }
     
 
