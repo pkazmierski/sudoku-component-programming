@@ -20,7 +20,7 @@ import java.net.URL;
 public class MainApp extends Application {
 	static SudokuBoard sudokuBoard = new SudokuBoard();
 	static SudokuSolver solver = new BactrackingSudokuSolver();
-	//static ObservableValue<Integer>[][] fields = new SimpleIntegerProperty[SudokuBoard.SIZE_OF_SUDOKU][SudokuBoard.SIZE_OF_SUDOKU];
+	static IntegerProperty[][] fields = new SimpleIntegerProperty[SudokuBoard.SIZE_OF_SUDOKU][SudokuBoard.SIZE_OF_SUDOKU];
 	
 	
 	@Override
@@ -41,7 +41,6 @@ public class MainApp extends Application {
 	}
 	
 	public static void main(String[] args) {
-		solver.solve(sudokuBoard);
 		launch(args);
 	}
 }

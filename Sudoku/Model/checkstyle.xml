@@ -30,7 +30,13 @@
 
 -->
 
+
+
 <module name="Checker">
+   <module name="BeforeExecutionExclusionFileFilter">
+      <property name="fileNamePattern" value="module\-info\.java$"/>
+   </module>
+   
    <module name="SuppressionCommentFilter"/>
     <!--
         If you set the basedir property below, then all reported file
@@ -72,6 +78,7 @@
            <property name="message" value="Line has trailing spaces."/>
         </module>
     -->
+	
     <module name="TreeWalker">
         <module name="FileContentsHolder"/>
 

@@ -2,9 +2,12 @@ package pl.compprog.gui;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -12,10 +15,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import pl.compprog.Difficulty;
-import pl.compprog.DifficultyNormal;
-import pl.compprog.SudokuBoard;
-import pl.compprog.SudokuRow;
+import pl.compprog.*;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -31,10 +31,12 @@ public class Controller implements Initializable {
 	public Button quitButton;
 	public Label boardStatus;
 	public Pane mainPane;
+	private Difficulty d;
+	private GridPane grid;
 
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle) {
-		GridPane grid = new GridPane();
+		grid = new GridPane();
 //		for(int i = 0; i < SudokuBoard.SIZE_OF_SUDOKU; i++) {
 //			for(int j = 0; j < SudokuBoard.SIZE_OF_SUDOKU; j++) {
 //				fields[i][j] = new SimpleIntegerProperty(sudokuBoard.get(j,i));
@@ -45,7 +47,17 @@ public class Controller implements Initializable {
 		for(int i = 0; i < SudokuBoard.SIZE_OF_SUDOKU; i++) {
 			for(int j = 0; j < SudokuBoard.SIZE_OF_SUDOKU; j++) {
 				Label l = new Label(String.valueOf(sudokuBoard.get(j, i)));
-				//l.textProperty().bind(fields[i][j].asString());
+//				l.textProperty().bind(fields[i][j].asString());
+//
+//				final ChangeListener changeListener = new ChangeListener() {
+//					@Override
+//					public void changed(ObservableValue observableValue, Object oldValue,
+//					                    Object newValue) {
+//						System.out.println("oldValue:"+ oldValue + ", newValue = " + newValue);
+//					}
+//				};
+//
+//				l.textProperty().addListener(changeListener);
 				l.setFont(Font.font(24));
 				grid.add(l, j, i);
 			}
@@ -56,11 +68,20 @@ public class Controller implements Initializable {
 		grid.setVgap(10);
 		mainPane.getChildren().add(grid);
 	}
+	
+	private void updateBoard() {
+		for (Node child : grid.getChildren()) {
+			Integer column = GridPane.getColumnIndex(child);
+			Integer row = GridPane.getRowIndex(child);
+			if (column != null && row != null) {
+				Label l = (Label) child;
+				l.setText(String.valueOf(sudokuBoard.get(column,row)));
+			}
+		}
+	}
 
 	public void quitGame(ActionEvent actionEvent) {
-		// get a handle to the stage
 		Stage stage = (Stage) quitButton.getScene().getWindow();
-		// do what you have to do
 		stage.close();
 	}
 	
@@ -75,7 +96,23 @@ public class Controller implements Initializable {
 	}
 	
 	public void startMediumDifficulty(ActionEvent actionEvent) {
-		Difficulty d = new DifficultyNormal();
+		solver.solve(sudokuBoard);
+		d = new DifficultyNormal();
 		d.prepareBoard(sudokuBoard);
+		updateBoard();
+	}
+
+	public void startEasyDifficulty(ActionEvent actionEvent) {
+		solver.solve(sudokuBoard);
+		d = new DifficultyEasy();
+		d.prepareBoard(sudokuBoard);
+		updateBoard();
+	}
+	
+	public void startHardDifficulty(ActionEvent actionEvent) {
+		solver.solve(sudokuBoard);
+		d = new DifficultyHard();
+		d.prepareBoard(sudokuBoard);
+		updateBoard();
 	}
 }
