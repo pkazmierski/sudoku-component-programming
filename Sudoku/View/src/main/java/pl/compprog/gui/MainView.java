@@ -1,4 +1,4 @@
 package pl.compprog.gui;
 
-public class MainApp {
+public class MainView {
 }
