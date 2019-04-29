@@ -33,7 +33,7 @@ public class SudokuField implements Serializable, Comparable<SudokuField>, Clone
      *
      * @return returns the value of the field
      */
-    public final int getFieldValue() {
+    public final int getValue() {
         return this.value;
     }
 
@@ -42,7 +42,7 @@ public class SudokuField implements Serializable, Comparable<SudokuField>, Clone
      *
      * @param inputValue value to be assigned to the field
      */
-    public final void setFieldValue(final int inputValue) {
+    public final void setValue(final int inputValue) {
         this.value = inputValue;
     }
 

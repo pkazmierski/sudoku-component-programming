@@ -53,9 +53,9 @@ public abstract class SudokuFieldGroup implements Serializable, Cloneable {
     public final boolean verify() {
         for (int i = 0; i < SudokuBoard.SIZE_OF_SUDOKU - 1; i++) {
             for (int j = i + 1; j < SudokuBoard.SIZE_OF_SUDOKU; j++) {
-                if (fields.get(i).getFieldValue() == fields.get(j)
-                        .getFieldValue()
-                        && fields.get(i).getFieldValue() != 0) {
+                if (fields.get(i).getValue() == fields.get(j)
+                        .getValue()
+                        && fields.get(i).getValue() != 0) {
                     return false;
                 }
             }

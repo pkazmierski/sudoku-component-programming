@@ -29,13 +29,13 @@ class SudokuFieldTest {
     void compareToTest() {
 
         SudokuField s1 = new SudokuField();
-        s1.setFieldValue(1);
+        s1.setValue(1);
         SudokuField s2 = new SudokuField();
-        s2.setFieldValue(2);
+        s2.setValue(2);
         SudokuField s3 = new SudokuField();
-        s3.setFieldValue(3);
+        s3.setValue(3);
         SudokuField s1a = new SudokuField();
-        s1a.setFieldValue(1);
+        s1a.setValue(1);
 
         assertTrue(s2.compareTo(s1) > 0);
         assertTrue(s2.compareTo(s3) < 0);
@@ -52,7 +52,7 @@ class SudokuFieldTest {
             SudokuField s2 = s1.clone();
             assertEquals(s1, s2);
             assertNotSame(s1, s2);
-            assertEquals(s1.getFieldValue(), s2.getFieldValue());
+            assertEquals(s1.getValue(), s2.getValue());
 
         } catch (Exception e) {
             e.printStackTrace();

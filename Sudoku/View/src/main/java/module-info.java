@@ -1,6 +1,4 @@
 open module ViewProject {
-
-	
 	requires ModelProject;
 	requires javafx.controls;
 	requires javafx.fxml;

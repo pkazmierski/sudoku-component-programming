@@ -7,7 +7,7 @@ import java.util.Collections;
 /**
  * Class used to solve sudoku board with bactracking algorithm.
  */
-public class BactrackingSudokuSolver implements SudokuSolver {
+public class BacktrackingSudokuSolver implements SudokuSolver {
 
     /**
      * Serves as a source to shuffled candidates arrays.

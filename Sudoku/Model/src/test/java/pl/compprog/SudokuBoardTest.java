@@ -2,7 +2,6 @@ package pl.compprog;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.commons.lang3.builder.Diff;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -20,7 +19,7 @@ public class SudokuBoardTest {
     public void testValidnessOfSudoku() {
         SudokuBoard sudokuBoard = new SudokuBoard();
         System.out.println(sudokuBoard);
-        SudokuSolver solver = new BactrackingSudokuSolver();
+        SudokuSolver solver = new BacktrackingSudokuSolver();
         solver.solve(sudokuBoard);
         for (int y = 0; y < sizeOfSudoku; y++) {
             assertTrue(sudokuBoard.getRow(y).verify());
@@ -37,10 +36,7 @@ public class SudokuBoardTest {
         }
         Difficulty d = new DifficultyNormal();
         d.prepareBoard(sudokuBoard);
-        System.out.println("============================");
-        sudokuBoard.print();
-        System.out.println("============================");
-        //System.out.println(sudokuBoard);
+        System.out.println(sudokuBoard);
     }
     
 
@@ -52,7 +48,7 @@ public class SudokuBoardTest {
     public void testRandomnessOfSudoku() {
         SudokuBoard sudokuBoard1 = new SudokuBoard();
         SudokuBoard sudokuBoard2 = new SudokuBoard();
-        SudokuSolver solver = new BactrackingSudokuSolver();
+        SudokuSolver solver = new BacktrackingSudokuSolver();
         solver.solve(sudokuBoard1);
         solver.solve(sudokuBoard2);
         assertNotEquals(sudokuBoard1, sudokuBoard2);
@@ -66,7 +62,7 @@ public class SudokuBoardTest {
     public void readAndWriteFileTest()
     {
         SudokuBoard sudokuBoard1 = new SudokuBoard();
-        SudokuSolver solver = new BactrackingSudokuSolver();
+        SudokuSolver solver = new BacktrackingSudokuSolver();
         solver.solve(sudokuBoard1);
         System.out.println(sudokuBoard1);
         SudokuBoardDaoFactory sudokuBoardDaoFactory = new SudokuBoardDaoFactory();
@@ -88,7 +84,7 @@ public class SudokuBoardTest {
     public void cloneTest()
     {
         SudokuBoard sudokuBoard1 = new SudokuBoard();
-        SudokuSolver solver = new BactrackingSudokuSolver();
+        SudokuSolver solver = new BacktrackingSudokuSolver();
         solver.solve(sudokuBoard1);
         SudokuBoard sudokuBoard2 = sudokuBoard1.clone();
         assertNotSame(sudokuBoard1, sudokuBoard2);

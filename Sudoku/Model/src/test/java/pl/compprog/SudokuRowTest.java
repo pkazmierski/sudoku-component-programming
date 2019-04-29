@@ -19,7 +19,7 @@ class SudokuRowTest {
         SudokuField[] array = new SudokuField[9];
         for (int i = 0; i < 9; i++) {
             array[i] = new SudokuField();
-            array[i].setFieldValue(i);
+            array[i].setValue(i);
         }
 
         SudokuRow r1 = new SudokuRow(array);

@@ -48,7 +48,6 @@ public class FileSudokuBoardDao implements Dao<SudokuBoard>, AutoCloseable {
      */
     public FileSudokuBoardDao(final String filename1) {
         filename = filename1;
-
     }
 
     /**
@@ -59,14 +58,11 @@ public class FileSudokuBoardDao implements Dao<SudokuBoard>, AutoCloseable {
      */
     @Override
     public final SudokuBoard read() throws Exception {
-
         if (fis == null) {
             fis = new FileInputStream(filename);
             ois = new ObjectInputStream(fis);
         }
         return (SudokuBoard) ois.readObject();
-
-
     }
 
     /**
@@ -91,7 +87,6 @@ public class FileSudokuBoardDao implements Dao<SudokuBoard>, AutoCloseable {
      */
     @Override
     public final void close() throws Exception {
-
         if (fos != null) {
             fos.close();
             oos.close();
@@ -109,7 +104,6 @@ public class FileSudokuBoardDao implements Dao<SudokuBoard>, AutoCloseable {
      */
     @Override
     public final void finalize() throws Exception {
-
        close();
     }
 

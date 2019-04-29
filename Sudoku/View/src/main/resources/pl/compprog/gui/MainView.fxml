@@ -1,14 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="$CONTROLLER_NAME$"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" styleClass=".text-field {    -fx-background-color: rgba(53,89,119,0.4);}" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.compprog.gui.MainView">
+    <bottom>
+        <HBox alignment="CENTER" prefHeight="83.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+            <Button fx:id="verifyButton" mnemonicParsing="false" onAction="#verifyAction" prefHeight="51.0" prefWidth="390.0" text="Verify">
+                <font>
+                    <Font size="24.0" />
+                </font>
+            </Button>
+        </HBox>
+    </bottom>
+    <top>
+        <MenuBar BorderPane.alignment="CENTER">
+            <Menu mnemonicParsing="false" text="File">
+                <MenuItem fx:id="loadMenuItem" mnemonicParsing="false" onAction="#loadAction" text="Load" />
+                <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" onAction="#saveAction" text="Save" />
+                <MenuItem fx:id="closeMenuItem" mnemonicParsing="false" onAction="#closeAction" text="Close" />
+            </Menu>
+            <Menu mnemonicParsing="false" text="New game">
+                <MenuItem fx:id="easyMenuItem" mnemonicParsing="false" onAction="#easyAction" text="Easy" />
+                <MenuItem fx:id="mediumMenuItem" mnemonicParsing="false" onAction="#mediumAction" text="Medium" />
+                <MenuItem fx:id="hardMenuItem" mnemonicParsing="false" onAction="#hardAction" text="Hard" />
+            </Menu>
+        </MenuBar>
+    </top>
+</BorderPane>

@@ -133,7 +133,7 @@ public class SudokuBoard implements Serializable {
      * @return value at (row, column).
      */
     public final int get(final int x, final int y) {
-        return getFieldAt(x, y).getFieldValue();
+        return getFieldAt(x, y).getValue();
     }
 
 
@@ -145,11 +145,11 @@ public class SudokuBoard implements Serializable {
      * @param value new value at (row, column).
      */
     public final void set(final int x, final int y, final int value) {
-        getFieldAt(x, y).setFieldValue(value);
+        getFieldAt(x, y).setValue(value);
         if ((!(getRow(y).verify() && getColumn(x).verify()
                 && getBox(x, y).verify()) && value != 0)
                 || value > SIZE_OF_SUDOKU || value < 0) {
-            getFieldAt(x, y).setFieldValue(0);
+            getFieldAt(x, y).setValue(0);
             throw new IllegalArgumentException(
                     "Cannot place the value " + value + " at " + x + ", " + y
                             + "");
@@ -169,12 +169,12 @@ public class SudokuBoard implements Serializable {
     public final boolean canBePlaced(final int row, final int col,
                                      final int num) {
         for (int i = 0; i < SIZE_OF_SUDOKU; i++) {
-            if (row != i && getFieldAt(col, i).getFieldValue() == num) {
+            if (row != i && getFieldAt(col, i).getValue() == num) {
                 return false;
             }
         }
         for (int j = 0; j < SIZE_OF_SUDOKU; j++) {
-            if (col != j && getFieldAt(j, row).getFieldValue() == num) {
+            if (col != j && getFieldAt(j, row).getValue() == num) {
                 return false;
             }
         }
@@ -187,7 +187,7 @@ public class SudokuBoard implements Serializable {
         for (int i = r; i < r + sqrtOfSize; i++) {
             for (int j = c; j < c + sqrtOfSize; j++) {
                 if (row != i && col != j
-                        && getFieldAt(j, i).getFieldValue() == num) {
+                        && getFieldAt(j, i).getValue() == num) {
                     return false;
                 }
             }
@@ -264,7 +264,7 @@ public class SudokuBoard implements Serializable {
      */
     public boolean checkBoard() {
         for(int i = 0; i <  SIZE_OF_SUDOKU * SIZE_OF_SUDOKU; i++) {
-            if(board.get(i).getFieldValue() == 0) {
+            if(board.get(i).getValue() == 0) {
                 return false;
             }
         }

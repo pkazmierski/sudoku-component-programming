@@ -10,6 +10,7 @@
     <version>8.0-SNAPSHOT</version>
 
     <name>${project.artifactId}-${project.version}</name>
+    <url>localhost</url>
 
     <modules>
         <module>Model</module>
@@ -84,28 +85,28 @@
     <build>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>3.0.0</version>
-                    <configuration>
-                        <configLocation>checkstyle.xml</configLocation>
-                        <encoding>UTF-8</encoding>
-                        <consoleOutput>true</consoleOutput>
-                        <failsOnError>true</failsOnError>
-                        <linkXRef>false</linkXRef>
-                        <excludes>**/module-info.java</excludes>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>checkstyle</id>
-                            <phase>verify</phase>
-                            <goals>
-                                <goal>check</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
+<!--                <plugin>-->
+<!--                    <groupId>org.apache.maven.plugins</groupId>-->
+<!--                    <artifactId>maven-checkstyle-plugin</artifactId>-->
+<!--                    <version>3.0.0</version>-->
+<!--                    <configuration>-->
+<!--                        <configLocation>checkstyle.xml</configLocation>-->
+<!--                        <encoding>UTF-8</encoding>-->
+<!--                        <consoleOutput>true</consoleOutput>-->
+<!--                        <failsOnError>true</failsOnError>-->
+<!--                        <linkXRef>false</linkXRef>-->
+<!--                        <excludes>**/module-info.java</excludes>-->
+<!--                    </configuration>-->
+<!--                    <executions>-->
+<!--                        <execution>-->
+<!--                            <id>checkstyle</id>-->
+<!--                            <phase>verify</phase>-->
+<!--                            <goals>-->
+<!--                                <goal>check</goal>-->
+<!--                            </goals>-->
+<!--                        </execution>-->
+<!--                    </executions>-->
+<!--                </plugin>-->
 
 
                 <plugin>
@@ -187,12 +188,6 @@
         </pluginManagement>
     </build>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-    </properties>
-
     <reporting>
         <plugins>
             <plugin>
@@ -234,4 +229,10 @@
             </plugin>
         </plugins>
     </reporting>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+    </properties>
 </project>
