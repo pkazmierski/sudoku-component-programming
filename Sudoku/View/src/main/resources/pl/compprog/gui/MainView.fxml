@@ -7,29 +7,45 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" styleClass=".text-field {    -fx-background-color: rgba(53,89,119,0.4);}" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.compprog.gui.MainView">
+<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="600.0" prefWidth="600.0"
+            styleClass=".text-field {    -fx-background-color: rgba(53,89,119,0.4);}"
+            xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="pl.compprog.gui.MainView">
     <bottom>
         <HBox alignment="CENTER" prefHeight="83.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-            <Button fx:id="verifyButton" mnemonicParsing="false" onAction="#verifyAction" prefHeight="51.0" prefWidth="390.0" text="Verify">
+            <Button fx:id="verifyButton" mnemonicParsing="false" onAction="#verifyAction" prefHeight="51.0"
+                    prefWidth="390.0" text="%verify">
                 <font>
-                    <Font size="24.0" />
+                    <Font size="24.0"/>
                 </font>
             </Button>
         </HBox>
     </bottom>
     <top>
-        <MenuBar BorderPane.alignment="CENTER">
-            <Menu mnemonicParsing="false" text="File">
-                <MenuItem fx:id="loadMenuItem" mnemonicParsing="false" onAction="#loadAction" text="Load" />
-                <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" onAction="#saveAction" text="Save" />
-                <MenuItem fx:id="closeMenuItem" mnemonicParsing="false" onAction="#closeAction" text="Close" />
-            </Menu>
-            <Menu mnemonicParsing="false" text="New game">
-                <MenuItem fx:id="easyMenuItem" mnemonicParsing="false" onAction="#easyAction" text="Easy" />
-                <MenuItem fx:id="mediumMenuItem" mnemonicParsing="false" onAction="#mediumAction" text="Medium" />
-                <MenuItem fx:id="hardMenuItem" mnemonicParsing="false" onAction="#hardAction" text="Hard" />
-            </Menu>
-        </MenuBar>
+        <AnchorPane xmlns:fx="http://javafx.com/fxml/1" BorderPane.alignment="CENTER" styleClass="menu-bar">
+            <MenuBar AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0">
+                <Menu fx:id="fileMenu" mnemonicParsing="false" text="%file">
+                    <MenuItem fx:id="loadMenuItem" mnemonicParsing="false" onAction="#loadAction" text="%load"/>
+                    <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" onAction="#saveAction" text="%save"/>
+                    <MenuItem fx:id="closeMenuItem" mnemonicParsing="false" onAction="#closeAction" text="%close"/>
+                </Menu>
+                <Menu fx:id="newGameMenu" mnemonicParsing="false" text="%new_game">
+                    <MenuItem fx:id="easyMenuItem" mnemonicParsing="false" onAction="#easyAction" text="%easy"/>
+                    <MenuItem fx:id="mediumMenuItem" mnemonicParsing="false" onAction="#mediumAction" text="%medium"/>
+                    <MenuItem fx:id="hardMenuItem" mnemonicParsing="false" onAction="#hardAction" text="%hard"/>
+                </Menu>
+                <Menu fx:id="languageMenu" mnemonicParsing="false" text="%language">
+                    <MenuItem fx:id="englishMenuItem" mnemonicParsing="false" onAction="#changeToEnglishAction"
+                              text="%english"/>
+                    <MenuItem fx:id="polishMenuItem" mnemonicParsing="false" onAction="#changeToPolishAction" text="%polish"/>
+                </Menu>
+            </MenuBar>
+            <Label fx:id="authorsLabel" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+                   style="-fx-font-weight: bold; -fx-text-fill: black; " />
+        </AnchorPane>
     </top>
 </BorderPane>
