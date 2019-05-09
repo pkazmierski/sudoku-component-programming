@@ -17,10 +17,11 @@ public class MainApp extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(location);
         fxmlLoader.setResources(ResourceBundle.getBundle("i18n.SudokuBundle", new Locale("en", "EN")));
         Parent root = fxmlLoader.load();
-        //BorderPane mainPane = (BorderPane) fxmlLoader.load();
         Scene scene = new Scene(root);
         stage.setTitle("Sudoku Game");
         stage.setScene(scene);
+        MainView controller = fxmlLoader.getController();
+        controller.setStage(stage);
         stage.show();
     }
 

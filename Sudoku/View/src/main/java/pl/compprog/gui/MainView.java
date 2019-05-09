@@ -9,26 +9,27 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import pl.compprog.*;
 
 import java.io.*;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.ParsePosition;
 import java.util.*;
 
 
 public class MainView implements Initializable {
-    private final String WAS_GENERATED_FILENAME = "wasGenerated.ser";
-    private final String SUDOKU_FILENAME = "sudoku.ser";
+    private final String WAS_GENERATED_FILENAME = "wasGenerated";
     public Button verifyButton;
     public MenuItem loadMenuItem;
     public MenuItem saveMenuItem;
@@ -43,6 +44,10 @@ public class MainView implements Initializable {
     public MenuItem englishMenuItem;
     public MenuItem polishMenuItem;
     public Label authorsLabel;
+    public AnchorPane anchorPane;
+    private FileChooser saveFileChooser = new FileChooser();
+    private FileChooser loadFileChooser = new FileChooser();
+    private Stage stage;
     private Locale englishLocale = new Locale("en", "EN");
     private ResourceBundle englishBundle = ResourceBundle.getBundle("i18n.SudokuBundle", englishLocale);
     private ResourceBundle polishBundle = ResourceBundle.getBundle("i18n.SudokuBundle");
@@ -60,6 +65,9 @@ public class MainView implements Initializable {
     private String currentVerifyButtonKey = "verify";
     private JavaBeanIntegerPropertyBuilder builder = JavaBeanIntegerPropertyBuilder.create();
     private boolean wasGenerated[][] = new boolean[9][9];
+
+    private enum Language {ENGLISH, POLISH}
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -85,7 +93,6 @@ public class MainView implements Initializable {
 
                     });
                     DecimalFormat format = new DecimalFormat("#");
-                    //https://stackoverflow.com/questions/31039449/java-8-u40-textformatter-javafx-to-restrict-user-input-only-for-decimal-number
                     textFields[j][i].setTextFormatter(new TextFormatter<>(c ->
                     {
                         if (c.getControlNewText().isEmpty()) {
@@ -121,9 +128,15 @@ public class MainView implements Initializable {
         vBox.getChildren().add(hBox);
         vBox.setAlignment(Pos.CENTER);
         mainPane.setCenter(vBox);
-
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("SER files (*.ser)", "*.ser");
+        saveFileChooser.getExtensionFilters().add(extFilter);
+        loadFileChooser.getExtensionFilters().add(extFilter);
         authorsLabel.setText(currentBundleAuthors.getString("authors_university") + ", " +
                 currentBundleAuthors.getString("authors_country"));
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 
     public void verifyAction(ActionEvent actionEvent) {
@@ -138,35 +151,54 @@ public class MainView implements Initializable {
     }
 
     public void loadAction(ActionEvent actionEvent) {
+
         SudokuBoardDaoFactory sudokuBoardDaoFactory = new SudokuBoardDaoFactory();
-        try (FileSudokuBoardDao dao = (FileSudokuBoardDao) sudokuBoardDaoFactory.getFileDao(SUDOKU_FILENAME)) {
-            SudokuBoard tempBoard = dao.read();
-            FileInputStream fis = new FileInputStream(WAS_GENERATED_FILENAME);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            wasGenerated =  (boolean[][]) ois.readObject();
-            reinitializeBoardLoading(tempBoard);
+        File boardFile = loadFileChooser.showOpenDialog(stage);
 
-        } catch (Exception e) {
+        if (boardFile != null) {
+            String boardFilename = boardFile.getName();
+            String generatedPath = boardFile.getParentFile() + "/" + WAS_GENERATED_FILENAME + "_"
+                    + boardFilename.substring(0, boardFilename.length() - 4) + ".ser";
+            if (Files.exists(Paths.get(generatedPath))) {
+                try (FileSudokuBoardDao dao =
+                             (FileSudokuBoardDao) sudokuBoardDaoFactory.getFileDao(boardFile.getAbsolutePath())) {
+                    SudokuBoard tempBoard = dao.read();
+                    FileInputStream fis = new FileInputStream(generatedPath);
+                    ObjectInputStream ois = new ObjectInputStream(fis);
+                    wasGenerated = (boolean[][]) ois.readObject();
+                    fis.close();
+                    ois.close();
+                    reinitializeBoardLoading(tempBoard);
 
-            e.printStackTrace();
+                } catch (Exception e) {
+
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
     public void saveAction(ActionEvent actionEvent) {
-        SudokuBoardDaoFactory sudokuBoardDaoFactory = new SudokuBoardDaoFactory();
-        try (FileSudokuBoardDao dao = (FileSudokuBoardDao) sudokuBoardDaoFactory.getFileDao(SUDOKU_FILENAME)) {
-            dao.write(board);
-            File file = new File(WAS_GENERATED_FILENAME);
-            FileOutputStream fos = new FileOutputStream(file);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(wasGenerated);
-            fos.close();
-            oos.close();
-        } catch (Exception e) {
 
-            e.printStackTrace();
+        SudokuBoardDaoFactory sudokuBoardDaoFactory = new SudokuBoardDaoFactory();
+        File boardFile = saveFileChooser.showSaveDialog(stage);
+        if (boardFile != null) {
+            String boardFilename = boardFile.getName();
+            File generatedFile = new File(boardFile.getParentFile() + "/" + WAS_GENERATED_FILENAME + "_"
+                    + boardFilename.substring(0, boardFilename.length() - 4)+ ".ser");
+            try (FileSudokuBoardDao dao =
+                         (FileSudokuBoardDao) sudokuBoardDaoFactory.getFileDao(boardFile.getAbsolutePath())) {
+                dao.write(board);
+                FileOutputStream fos = new FileOutputStream(generatedFile);
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
+                oos.writeObject(wasGenerated);
+                fos.close();
+                oos.close();
+            } catch (Exception e) {
+
+                e.printStackTrace();
+            }
         }
-        //reinitializeBoard();
     }
 
     public void closeAction(ActionEvent actionEvent) {
@@ -214,12 +246,12 @@ public class MainView implements Initializable {
                 integerProperties[j][i].set(value);
                 TextField tf = getTextField(j, i);
                 if (value == 0) {
-                    wasGenerated [j][i] = false;
+                    wasGenerated[j][i] = false;
                     tf.setEditable(true);
                     tf.setStyle("-fx-background-color: #ffffff; -fx-cursor: text;");
 
                 } else {
-                    wasGenerated [j][i] = true;
+                    wasGenerated[j][i] = true;
                     tf.setEditable(false);
                     tf.setStyle("-fx-background-color: #e0e0e0; -fx-cursor: none;");
 
@@ -249,13 +281,17 @@ public class MainView implements Initializable {
         reinitializeBoard();
     }
 
-    public void changeLangauge(boolean isEnglish) {
-        if (isEnglish) {
-            currentBundle = englishBundle;
-            currentBundleAuthors = englishBundleAuthors;
-        } else {
-            currentBundle = polishBundle;
-            currentBundleAuthors = polishBundleAuthors;
+    public void changeLangauge(Language language) {
+        switch (language) {
+            case ENGLISH:
+                currentBundle = englishBundle;
+                currentBundleAuthors = englishBundleAuthors;
+                break;
+
+            case POLISH:
+                currentBundle = polishBundle;
+                currentBundleAuthors = polishBundleAuthors;
+                break;
         }
         loadMenuItem.setText(currentBundle.getString("load"));
         saveMenuItem.setText(currentBundle.getString("save"));
@@ -274,10 +310,10 @@ public class MainView implements Initializable {
     }
 
     public void changeToPolishAction(ActionEvent actionEvent) {
-        changeLangauge(false);
+        changeLangauge(Language.POLISH);
     }
 
     public void changeToEnglishAction(ActionEvent actionEvent) {
-        changeLangauge(true);
+        changeLangauge(Language.ENGLISH);
     }
 }

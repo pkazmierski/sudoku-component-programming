@@ -26,7 +26,7 @@
         </HBox>
     </bottom>
     <top>
-        <AnchorPane xmlns:fx="http://javafx.com/fxml/1" BorderPane.alignment="CENTER" styleClass="menu-bar">
+        <AnchorPane fx:id="anchorPane" xmlns:fx="http://javafx.com/fxml/1" BorderPane.alignment="CENTER" styleClass="menu-bar">
             <MenuBar AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0">
                 <Menu fx:id="fileMenu" mnemonicParsing="false" text="%file">
                     <MenuItem fx:id="loadMenuItem" mnemonicParsing="false" onAction="#loadAction" text="%load"/>
