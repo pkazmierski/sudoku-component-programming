@@ -1,4 +1,4 @@
-package pl.compprog;
+package pl.compprog.sudoku;
 
 import java.io.*;
 import java.util.Arrays;

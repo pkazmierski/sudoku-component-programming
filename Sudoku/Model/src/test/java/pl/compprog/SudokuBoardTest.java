@@ -3,12 +3,21 @@ package pl.compprog;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
+import pl.compprog.difficulties.Difficulty;
+import pl.compprog.difficulties.DifficultyNormal;
+import pl.compprog.solvers.BacktrackingSudokuSolver;
+import pl.compprog.solvers.SudokuSolver;
+import pl.compprog.sudoku.SudokuBoard;
+
+import java.util.logging.Logger;
 
 /**
  * Class used to test whether sudoku board was properly generated.
  */
 public class SudokuBoardTest {
 
+
+    private static final Logger logger = Logger.getLogger(SudokuBoardTest.class.getName());
     private final int sizeOfSudoku = 9;
 
     /**
@@ -54,27 +63,6 @@ public class SudokuBoardTest {
         assertNotEquals(sudokuBoard1, sudokuBoard2);
     }
 
-    /**
-     * Tests whether sudokuBoard written to and read from the file
-     * is the same
-     */
-    @Test
-    public void readAndWriteFileTest()
-    {
-        SudokuBoard sudokuBoard1 = new SudokuBoard();
-        SudokuSolver solver = new BacktrackingSudokuSolver();
-        solver.solve(sudokuBoard1);
-        System.out.println(sudokuBoard1);
-        SudokuBoardDaoFactory sudokuBoardDaoFactory = new SudokuBoardDaoFactory();
-        try(FileSudokuBoardDao dao = (FileSudokuBoardDao) sudokuBoardDaoFactory.getFileDao("sudoku.ser")) {
-            dao.write(sudokuBoard1);
-            SudokuBoard sudokuBoard2 = dao.read();
-            assertEquals(sudokuBoard1, sudokuBoard2);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * Tests whether cloned sudokuBoard is not the

@@ -1,6 +1,7 @@
 package pl.compprog;
 
 import org.junit.jupiter.api.Test;
+import pl.compprog.sudoku.SudokuField;
 
 import static org.junit.jupiter.api.Assertions.*;
 

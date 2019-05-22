@@ -1,6 +1,4 @@
-package pl.compprog;
-
-import java.io.Serializable;
+package pl.compprog.sudoku;
 
 /**
  * class representing a 3x3 grid of fields (subgrid) called box.

@@ -16,16 +16,26 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import javafx.util.converter.IntegerStringConverter;
-import pl.compprog.*;
+import pl.compprog.daos.FileSudokuBoardDao;
+import pl.compprog.daos.SudokuBoardDaoFactory;
+import pl.compprog.difficulties.Difficulty;
+import pl.compprog.difficulties.DifficultyEasy;
+import pl.compprog.difficulties.DifficultyHard;
+import pl.compprog.exceptions.ApplicationException;
+import pl.compprog.exceptions.DaoException;
+import pl.compprog.solvers.BacktrackingSudokuSolver;
+import pl.compprog.solvers.SudokuSolver;
+import pl.compprog.sudoku.SudokuBoard;
 
 import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.ParsePosition;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class MainView implements Initializable {
@@ -67,7 +77,8 @@ public class MainView implements Initializable {
     private boolean wasGenerated[][] = new boolean[9][9];
 
     private enum Language {ENGLISH, POLISH}
-
+    private static final Logger logger = Logger.getLogger(MainView.class.getName());
+    private static final ResourceBundle messagesBundle = ResourceBundle.getBundle("pl.compprog.messages");
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -161,18 +172,19 @@ public class MainView implements Initializable {
                     + boardFilename.substring(0, boardFilename.length() - 4) + ".ser";
             if (Files.exists(Paths.get(generatedPath))) {
                 try (FileSudokuBoardDao dao =
-                             (FileSudokuBoardDao) sudokuBoardDaoFactory.getFileDao(boardFile.getAbsolutePath())) {
-                    SudokuBoard tempBoard = dao.read();
-                    FileInputStream fis = new FileInputStream(generatedPath);
-                    ObjectInputStream ois = new ObjectInputStream(fis);
+                             (FileSudokuBoardDao) sudokuBoardDaoFactory.getFileDao(boardFile.getAbsolutePath());
+                     FileInputStream fis = new FileInputStream(generatedPath);
+                     ObjectInputStream ois = new ObjectInputStream(fis)) {
+                    SudokuBoard tempBoard = dao.readEx();
                     wasGenerated = (boolean[][]) ois.readObject();
-                    fis.close();
-                    ois.close();
                     reinitializeBoardLoading(tempBoard);
 
-                } catch (Exception e) {
-
-                    e.printStackTrace();
+                } catch (DaoException | IOException ex) {
+                    logger.log(Level.SEVERE, messagesBundle.getString(DaoException.OPEN_ERROR), ex);
+                } catch (ClassNotFoundException cnfex) {
+                    logger.log(Level.SEVERE, messagesBundle.getString(DaoException.INVALID_CAST), cnfex);
+                } catch (ApplicationException aex) {
+                    logger.log(Level.SEVERE, messagesBundle.getString(ApplicationException.RESOURCE_BUNDLE_IS_NULL), aex);
                 }
             }
         }
@@ -187,16 +199,15 @@ public class MainView implements Initializable {
             File generatedFile = new File(boardFile.getParentFile() + "/" + WAS_GENERATED_FILENAME + "_"
                     + boardFilename.substring(0, boardFilename.length() - 4)+ ".ser");
             try (FileSudokuBoardDao dao =
-                         (FileSudokuBoardDao) sudokuBoardDaoFactory.getFileDao(boardFile.getAbsolutePath())) {
-                dao.write(board);
-                FileOutputStream fos = new FileOutputStream(generatedFile);
-                ObjectOutputStream oos = new ObjectOutputStream(fos);
+                         (FileSudokuBoardDao) sudokuBoardDaoFactory.getFileDao(boardFile.getAbsolutePath());
+                 FileOutputStream fos = new FileOutputStream(generatedFile);
+                 ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+                dao.writeEx(board);
                 oos.writeObject(wasGenerated);
-                fos.close();
-                oos.close();
-            } catch (Exception e) {
-
-                e.printStackTrace();
+            } catch (DaoException | IOException ex) {
+                logger.log(Level.SEVERE, messagesBundle.getString(DaoException.NULL_FILE), ex);
+            } catch (ApplicationException aex) {
+                logger.log(Level.SEVERE, messagesBundle.getString(ApplicationException.RESOURCE_BUNDLE_IS_NULL), aex);
             }
         }
     }

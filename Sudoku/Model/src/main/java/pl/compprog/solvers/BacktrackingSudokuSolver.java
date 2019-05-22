@@ -1,4 +1,6 @@
-package pl.compprog;
+package pl.compprog.solvers;
+
+import pl.compprog.sudoku.SudokuBoard;
 
 import java.util.ArrayList;
 import java.util.Arrays;

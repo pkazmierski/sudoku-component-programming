@@ -1,4 +1,6 @@
-package pl.compprog;
+package pl.compprog.difficulties;
+
+import pl.compprog.sudoku.SudokuBoard;
 
 import java.util.Random;
 

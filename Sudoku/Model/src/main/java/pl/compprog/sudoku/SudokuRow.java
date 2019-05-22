@@ -1,4 +1,4 @@
-package pl.compprog;
+package pl.compprog.sudoku;
 
 /**
  * class representing a row in a sudoku board.

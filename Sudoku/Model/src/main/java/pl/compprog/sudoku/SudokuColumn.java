@@ -1,4 +1,4 @@
-package pl.compprog;
+package pl.compprog.sudoku;
 
 
 /**

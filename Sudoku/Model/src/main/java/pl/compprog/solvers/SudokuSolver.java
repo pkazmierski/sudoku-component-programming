@@ -1,4 +1,6 @@
-package pl.compprog;
+package pl.compprog.solvers;
+
+import pl.compprog.sudoku.SudokuBoard;
 
 /**
  * Interface used to solve sudoku board.

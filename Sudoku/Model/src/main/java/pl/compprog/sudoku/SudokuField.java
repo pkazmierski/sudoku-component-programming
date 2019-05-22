@@ -1,4 +1,4 @@
-package pl.compprog;
+package pl.compprog.sudoku;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;

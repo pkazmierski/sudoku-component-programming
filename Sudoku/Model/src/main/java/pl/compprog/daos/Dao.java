@@ -1,4 +1,6 @@
-package pl.compprog;
+package pl.compprog.daos;
+
+import pl.compprog.exceptions.DaoException;
 
 /**
  * Interface representing a generic DAO object.
@@ -12,15 +14,19 @@ public interface Dao<T> {
      * and returns it.
      *
      * @return T object read form the file
-     * @throws Exception execption which could be thrown
+     * @throws DaoException execption which could be thrown
      */
-    T read() throws Exception;
+    T readEx() throws DaoException;
+
+    T read();
 
     /**
      * Writes T object to a file.
      *
      * @param obj T object to be written
-     * @throws Exception execption which could be thrown
+     * @throws DaoException execption which could be thrown
      */
-    void write(T obj) throws  Exception;
+    void writeEx(T obj) throws DaoException;
+
+    void write(T obj);
 }
