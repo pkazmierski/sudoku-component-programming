@@ -10,11 +10,12 @@ import pl.compprog.solvers.SudokuSolver;
 import pl.compprog.sudoku.SudokuBoard;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.logging.LogManager;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class FileSudokuBoardDaoTest {
-
 
     @Test
     public void testOpenWithoutDeclaredExceptions() {
