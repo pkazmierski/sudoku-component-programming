@@ -5,8 +5,9 @@ import java.util.logging.LogManager;
 
 public class LogConfigurator {
     static {
-        InputStream stream = LogConfigurator.class.getClassLoader().
-                getResourceAsStream("pl.compprog.logging.properties");
+        System.out.println("AAAA");
+        InputStream stream = LogConfigurator.class.
+                getResourceAsStream("logging.properties");
         try {
             LogManager.getLogManager().readConfiguration(stream);
         } catch (IOException e) {

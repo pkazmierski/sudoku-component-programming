@@ -11,11 +11,16 @@ import pl.compprog.sudoku.SudokuBoard;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Level;
 import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class FileSudokuBoardDaoTest {
+
+    //LogConfigurator lc = new LogConfigurator();
+    private static final Logger logger = Logger.getLogger(FileSudokuBoardDaoTest.class.getName());
 
     @Test
     public void testOpenWithoutDeclaredExceptions() {
@@ -67,7 +72,7 @@ class FileSudokuBoardDaoTest {
         SudokuBoard sudokuBoard1 = new SudokuBoard();
         SudokuSolver solver = new BacktrackingSudokuSolver();
         solver.solve(sudokuBoard1);
-        System.out.println(sudokuBoard1);
+        logger.log(Level.INFO, sudokuBoard1.toString());
         SudokuBoardDaoFactory sudokuBoardDaoFactory = new SudokuBoardDaoFactory();
         try(FileSudokuBoardDao dao = (FileSudokuBoardDao) sudokuBoardDaoFactory.getFileDao("sudoku.ser")) {
             dao.writeEx(sudokuBoard1);

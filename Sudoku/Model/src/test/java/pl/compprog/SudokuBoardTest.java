@@ -9,6 +9,7 @@ import pl.compprog.solvers.BacktrackingSudokuSolver;
 import pl.compprog.solvers.SudokuSolver;
 import pl.compprog.sudoku.SudokuBoard;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -27,7 +28,7 @@ public class SudokuBoardTest {
     @Test
     public void testValidnessOfSudoku() {
         SudokuBoard sudokuBoard = new SudokuBoard();
-        System.out.println(sudokuBoard);
+        logger.log(Level.INFO, sudokuBoard.toString());
         SudokuSolver solver = new BacktrackingSudokuSolver();
         solver.solve(sudokuBoard);
         for (int y = 0; y < sizeOfSudoku; y++) {
@@ -45,7 +46,7 @@ public class SudokuBoardTest {
         }
         Difficulty d = new DifficultyNormal();
         d.prepareBoard(sudokuBoard);
-        System.out.println(sudokuBoard);
+        logger.log(Level.INFO, sudokuBoard.toString());
     }
     
 
