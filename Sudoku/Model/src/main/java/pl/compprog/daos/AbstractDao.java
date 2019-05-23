@@ -5,7 +5,7 @@ import pl.compprog.sudoku.SudokuBoard;
 
 import java.util.ResourceBundle;
 
-public abstract class AbstractDao implements Dao<SudokuBoard>, AutoCloseable {
+public abstract class AbstractDao<T> implements Dao<T>, AutoCloseable {
 
     private static final ResourceBundle bundle = ResourceBundle.getBundle("pl.compprog.messages");
 

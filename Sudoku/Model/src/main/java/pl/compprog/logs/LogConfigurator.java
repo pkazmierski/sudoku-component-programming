@@ -1,13 +1,12 @@
-package pl.compprog;
+package pl.compprog.logs;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.LogManager;
 
 public class LogConfigurator {
     static {
-        System.out.println("AAAA");
         InputStream stream = LogConfigurator.class.
-                getResourceAsStream("logging.properties");
+                getResourceAsStream("/pl/compprog/logging.properties");
         try {
             LogManager.getLogManager().readConfiguration(stream);
         } catch (IOException e) {

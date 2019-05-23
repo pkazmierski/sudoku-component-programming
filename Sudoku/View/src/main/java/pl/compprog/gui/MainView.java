@@ -16,6 +16,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import javafx.util.converter.IntegerStringConverter;
+import pl.compprog.logs.LogConfigurator;
 import pl.compprog.daos.FileSudokuBoardDao;
 import pl.compprog.daos.SudokuBoardDaoFactory;
 import pl.compprog.difficulties.Difficulty;
@@ -77,6 +78,7 @@ public class MainView implements Initializable {
     private boolean wasGenerated[][] = new boolean[9][9];
 
     private enum Language {ENGLISH, POLISH}
+    LogConfigurator lc = new LogConfigurator();
     private static final Logger logger = Logger.getLogger(MainView.class.getName());
     private static final ResourceBundle messagesBundle = ResourceBundle.getBundle("pl.compprog.messages");
 

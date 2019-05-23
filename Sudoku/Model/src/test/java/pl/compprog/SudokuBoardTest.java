@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import pl.compprog.difficulties.Difficulty;
 import pl.compprog.difficulties.DifficultyNormal;
+import pl.compprog.logs.LogConfigurator;
 import pl.compprog.solvers.BacktrackingSudokuSolver;
 import pl.compprog.solvers.SudokuSolver;
 import pl.compprog.sudoku.SudokuBoard;
@@ -18,6 +19,7 @@ import java.util.logging.Logger;
 public class SudokuBoardTest {
 
 
+    LogConfigurator lc = new LogConfigurator();
     private static final Logger logger = Logger.getLogger(SudokuBoardTest.class.getName());
     private final int sizeOfSudoku = 9;
 
