@@ -18,4 +18,8 @@ public class SudokuBoardDaoFactory {
     public final Dao getFileDao(final String filename) throws ApplicationException {
         return new FileSudokuBoardDao(filename);
     }
+
+    public final Dao getDatabaseDao(final String boardName) throws ApplicationException {
+        return new JdbcSudokuBoardDao(boardName);
+    }
 }

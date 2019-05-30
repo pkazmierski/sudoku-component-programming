@@ -75,7 +75,7 @@ public class MainView implements Initializable {
     private TextField[][] textFields = new TextField[9][9];
     private String currentVerifyButtonKey = "verify";
     private JavaBeanIntegerPropertyBuilder builder = JavaBeanIntegerPropertyBuilder.create();
-    private boolean wasGenerated[][] = new boolean[9][9];
+    private boolean[][] wasGenerated = new boolean[9][9];
 
     private enum Language {ENGLISH, POLISH}
     private final Logger logger = FileAndConsoleLogger.getConfiguredLogger(MainView.class.getName());

@@ -1,8 +1,6 @@
-package pl.compprog;
+package pl.compprog.daos;
 
 import org.junit.jupiter.api.Test;
-import pl.compprog.daos.FileSudokuBoardDao;
-import pl.compprog.daos.SudokuBoardDaoFactory;
 import pl.compprog.exceptions.ApplicationException;
 import pl.compprog.exceptions.DaoException;
 import pl.compprog.logs.FileAndConsoleLogger;
@@ -18,10 +16,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FileSudokuBoardDaoTest {
 
-    private final Logger logger = FileAndConsoleLogger.getConfiguredLogger(FileSudokuBoardDaoTest.class.getName());
+    private static final Logger logger = FileAndConsoleLogger.getConfiguredLogger(FileSudokuBoardDaoTest.class.getName());
 
     @Test
-    public void testOpenWithoutDeclaredExceptions() {
+    public void testCreateDaoWithNullName() {
 
         assertThrows(DaoException.class, () -> new FileSudokuBoardDao(null));
     }

@@ -4,4 +4,5 @@ open module ViewProject {
 	requires javafx.fxml;
 	requires java.base;
 	requires java.logging;
+	requires java.sql;
 }

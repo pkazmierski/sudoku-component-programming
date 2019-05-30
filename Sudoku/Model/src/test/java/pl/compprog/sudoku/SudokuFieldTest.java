@@ -1,4 +1,4 @@
-package pl.compprog;
+package pl.compprog.sudoku;
 
 import org.junit.jupiter.api.Test;
 import pl.compprog.sudoku.SudokuField;

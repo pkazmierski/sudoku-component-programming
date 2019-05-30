@@ -7,4 +7,5 @@ open module ModelProject {
 	exports pl.compprog.logs;
 	requires org.apache.commons.lang3;
 	requires java.logging;
+    requires java.sql;
 }

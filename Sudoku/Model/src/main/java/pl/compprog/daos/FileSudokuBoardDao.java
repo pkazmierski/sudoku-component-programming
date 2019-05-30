@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  */
 public class FileSudokuBoardDao extends AbstractDao<SudokuBoard> {
 
-    private final Logger logger = FileAndConsoleLogger.getConfiguredLogger(FileSudokuBoardDao.class.getName());
+    private static final Logger logger = FileAndConsoleLogger.getConfiguredLogger(FileSudokuBoardDao.class.getName());
 
     /**
      * Name of processed file.
@@ -141,6 +141,7 @@ public class FileSudokuBoardDao extends AbstractDao<SudokuBoard> {
      * to be sure that all used
      * resources are closed.
      */
+    @SuppressWarnings("Duplicates")
     @Override
     public final void close() throws IOException {
         if (fos != null) {

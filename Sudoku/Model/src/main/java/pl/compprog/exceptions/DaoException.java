@@ -13,6 +13,9 @@ public class DaoException extends ApplicationException {
     public static final String OPEN_ERROR = "open.error";
     public static final String INVALID_CAST = "invalid.cast";
     public static final String NULL_BOARD = "null.board";
+    public static final String SQL_ERROR = "sql.error";
+    public static final String NO_JDBC_DRIVER = "no.JDBC.driver";
+    public static final String NO_SUCH_RECORD = "no.such.record";
 
     static {
         Locale locale = Locale.getDefault(Locale.Category.DISPLAY);

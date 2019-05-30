@@ -15,7 +15,7 @@ public abstract class AbstractDao<T> implements Dao<T>, AutoCloseable {
         }
     }
 
-    public String getDaoMessage(String key) {
+    public static String getDaoMessage(String key) {
         return bundle.getString(key);
     }
 }
