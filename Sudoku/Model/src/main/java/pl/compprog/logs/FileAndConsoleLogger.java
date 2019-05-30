@@ -4,17 +4,11 @@ import java.io.InputStream;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-public class FileAndConsoleLogger extends Logger {
-
+public class FileAndConsoleLogger {
 
     private static boolean loggerConfigured = false;
 
-    private FileAndConsoleLogger(String name, String resourceBundleName) {
-        super(name, resourceBundleName);
-    }
-
-
-    public static Logger getFileAndConsoleLogger(String name) {
+    public static Logger getConfiguredLogger(String name) {
         if (!loggerConfigured) {
             InputStream stream = FileAndConsoleLogger.class.
                     getResourceAsStream("/pl/compprog/logging.properties");
@@ -25,6 +19,6 @@ public class FileAndConsoleLogger extends Logger {
                 e.printStackTrace();
             }
         }
-        return getLogger(name);
+        return Logger.getLogger(name);
     }
 }

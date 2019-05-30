@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  */
 public class FileSudokuBoardDao extends AbstractDao<SudokuBoard> {
 
-    private final Logger logger = FileAndConsoleLogger.getFileAndConsoleLogger(FileSudokuBoardDao.class.getName());
+    private final Logger logger = FileAndConsoleLogger.getConfiguredLogger(FileSudokuBoardDao.class.getName());
 
     /**
      * Name of processed file.

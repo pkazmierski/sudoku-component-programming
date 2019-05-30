@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FileSudokuBoardDaoTest {
 
-    private final Logger logger = FileAndConsoleLogger.getFileAndConsoleLogger(FileSudokuBoardDaoTest.class.getName());
+    private final Logger logger = FileAndConsoleLogger.getConfiguredLogger(FileSudokuBoardDaoTest.class.getName());
 
     @Test
     public void testOpenWithoutDeclaredExceptions() {

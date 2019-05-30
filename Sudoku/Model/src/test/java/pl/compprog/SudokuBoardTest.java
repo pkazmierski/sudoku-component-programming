@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 public class SudokuBoardTest {
 
 
-    private final Logger logger = FileAndConsoleLogger.getFileAndConsoleLogger(SudokuBoardTest.class.getName());
+    private final Logger logger = FileAndConsoleLogger.getConfiguredLogger(SudokuBoardTest.class.getName());
     private final int sizeOfSudoku = 9;
 
     /**

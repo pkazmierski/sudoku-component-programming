@@ -78,7 +78,7 @@ public class MainView implements Initializable {
     private boolean wasGenerated[][] = new boolean[9][9];
 
     private enum Language {ENGLISH, POLISH}
-    private final Logger logger = FileAndConsoleLogger.getFileAndConsoleLogger(MainView.class.getName());
+    private final Logger logger = FileAndConsoleLogger.getConfiguredLogger(MainView.class.getName());
     private final ResourceBundle messagesBundle = ResourceBundle.getBundle("pl.compprog.messages");
 
     @Override
