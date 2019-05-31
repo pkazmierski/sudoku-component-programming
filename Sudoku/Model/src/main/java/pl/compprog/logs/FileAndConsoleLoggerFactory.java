@@ -4,13 +4,13 @@ import java.io.InputStream;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-public class FileAndConsoleLogger {
+public class FileAndConsoleLoggerFactory {
 
     private static boolean loggerConfigured = false;
 
     public static Logger getConfiguredLogger(String name) {
         if (!loggerConfigured) {
-            InputStream stream = FileAndConsoleLogger.class.
+            InputStream stream = FileAndConsoleLoggerFactory.class.
                     getResourceAsStream("/pl/compprog/logging.properties");
             try {
                 LogManager.getLogManager().readConfiguration(stream);

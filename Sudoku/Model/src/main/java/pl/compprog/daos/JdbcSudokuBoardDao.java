@@ -3,16 +3,15 @@ import java.io.*;
 import java.sql.*;
 import java.util.logging.Logger;
 
-import org.apache.commons.lang3.ObjectUtils;
 import pl.compprog.exceptions.ApplicationException;
 import pl.compprog.exceptions.DaoException;
-import pl.compprog.logs.FileAndConsoleLogger;
+import pl.compprog.logs.FileAndConsoleLoggerFactory;
 import pl.compprog.sudoku.SudokuBoard;
 import static java.util.logging.Level.SEVERE;
 
 public class JdbcSudokuBoardDao extends AbstractDao<SudokuBoard>{
 
-    private static final Logger logger = FileAndConsoleLogger.getConfiguredLogger(JdbcSudokuBoardDao.class.getName());
+    private static final Logger logger = FileAndConsoleLoggerFactory.getConfiguredLogger(JdbcSudokuBoardDao.class.getName());
     private static final String DRIVER = "org.sqlite.JDBC";
     private static final String DB_URL = "jdbc:sqlite:SudokuBoards.db";
 

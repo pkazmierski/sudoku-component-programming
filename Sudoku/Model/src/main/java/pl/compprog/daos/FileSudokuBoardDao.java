@@ -1,7 +1,7 @@
 package pl.compprog.daos;
 
 
-import pl.compprog.logs.FileAndConsoleLogger;
+import pl.compprog.logs.FileAndConsoleLoggerFactory;
 import pl.compprog.exceptions.ApplicationException;
 import pl.compprog.exceptions.DaoException;
 import pl.compprog.sudoku.SudokuBoard;
@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  */
 public class FileSudokuBoardDao extends AbstractDao<SudokuBoard> {
 
-    private static final Logger logger = FileAndConsoleLogger.getConfiguredLogger(FileSudokuBoardDao.class.getName());
+    private static final Logger logger = FileAndConsoleLoggerFactory.getConfiguredLogger(FileSudokuBoardDao.class.getName());
 
     /**
      * Name of processed file.

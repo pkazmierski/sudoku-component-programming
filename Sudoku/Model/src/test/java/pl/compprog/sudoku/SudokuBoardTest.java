@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import pl.compprog.difficulties.Difficulty;
 import pl.compprog.difficulties.DifficultyNormal;
-import pl.compprog.logs.FileAndConsoleLogger;
+import pl.compprog.logs.FileAndConsoleLoggerFactory;
 import pl.compprog.solvers.BacktrackingSudokuSolver;
 import pl.compprog.solvers.SudokuSolver;
 
@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 public class SudokuBoardTest {
 
 
-    private static final Logger logger = FileAndConsoleLogger.getConfiguredLogger(SudokuBoardTest.class.getName());
+    private static final Logger logger = FileAndConsoleLoggerFactory.getConfiguredLogger(SudokuBoardTest.class.getName());
     private final int sizeOfSudoku = 9;
 
     /**

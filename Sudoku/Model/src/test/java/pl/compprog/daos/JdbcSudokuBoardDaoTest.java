@@ -3,7 +3,7 @@ package pl.compprog.daos;
 import org.junit.jupiter.api.Test;
 import pl.compprog.exceptions.ApplicationException;
 import pl.compprog.exceptions.DaoException;
-import pl.compprog.logs.FileAndConsoleLogger;
+import pl.compprog.logs.FileAndConsoleLoggerFactory;
 import pl.compprog.solvers.BacktrackingSudokuSolver;
 import pl.compprog.solvers.SudokuSolver;
 import pl.compprog.sudoku.SudokuBoard;
@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class JdbcSudokuBoardDaoTest {
 
-    private static final Logger logger = FileAndConsoleLogger.getConfiguredLogger(JdbcSudokuBoardDao.class.getName());
+    private static final Logger logger = FileAndConsoleLoggerFactory.getConfiguredLogger(JdbcSudokuBoardDao.class.getName());
 
 
     @Test
