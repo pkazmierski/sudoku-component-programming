@@ -62,6 +62,9 @@ public class FileSudokuBoardDao extends AbstractDao<SudokuBoard> {
         if (filename1 == null) {
             throw new DaoException(DaoException.NULL_NAME);
         }
+        if (wasGenerated == null) {
+            throw new DaoException(DaoException.NULL_BOARD);
+        }
         filename = filename1;
         this.wasGenerated = wasGenerated;
     }

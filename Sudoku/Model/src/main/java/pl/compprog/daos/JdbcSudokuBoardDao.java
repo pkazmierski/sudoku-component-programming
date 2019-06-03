@@ -55,6 +55,9 @@ public class JdbcSudokuBoardDao extends AbstractDao<SudokuBoard>{
         if (boardName == null) {
             throw new DaoException(DaoException.NULL_NAME);
         }
+        if (wasGenerated == null) {
+            throw new DaoException(DaoException.NULL_BOARD);
+        }
         try {
             conn = DriverManager.getConnection(DB_URL);
             stat = conn.createStatement();
