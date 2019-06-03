@@ -80,7 +80,7 @@ class JdbcSudokuBoardDaoTest {
         }
         logger.log(Level.INFO, sudokuBoard1.toString());
         SudokuBoardDaoFactory sudokuBoardDaoFactory = new SudokuBoardDaoFactory();
-        try(JdbcSudokuBoardDao dao = (JdbcSudokuBoardDao) sudokuBoardDaoFactory.getDatabaseDao("sudokuBoard")) {
+        try(JdbcSudokuBoardDao dao = (JdbcSudokuBoardDao) sudokuBoardDaoFactory.getDatabaseDao("sudokuBoard", wasGenerated1)) {
             SudokuBoard sudokuBoard2 = dao.readEx();
             boolean[][] wasGenerated2 = dao.getWasGenerated();
             assertEquals(sudokuBoard1, sudokuBoard2);
