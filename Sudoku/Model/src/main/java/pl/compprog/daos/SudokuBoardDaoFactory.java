@@ -19,7 +19,15 @@ public class SudokuBoardDaoFactory {
         return new FileSudokuBoardDao(filename);
     }
 
+    public final Dao getFileDao(final String filename, boolean[][] wasGenerated) throws ApplicationException {
+        return new FileSudokuBoardDao(filename, wasGenerated);
+    }
+
     public final Dao getDatabaseDao(final String boardName) throws ApplicationException {
         return new JdbcSudokuBoardDao(boardName);
+    }
+
+    public final Dao getDatabaseDao(final String boardName, boolean[][] wasGenerated) throws ApplicationException {
+        return new JdbcSudokuBoardDao(boardName, wasGenerated);
     }
 }

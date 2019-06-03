@@ -16,14 +16,14 @@ public class JdbcSudokuBoardDao extends AbstractDao<SudokuBoard>{
     private static final String DB_URL = "jdbc:sqlite:SudokuBoards.db";
 
     private static final String CREATION_QUERY = "CREATE TABLE IF NOT EXISTS BOARDS ([name] VARCHAR(255) PRIMARY KEY, [content] LONGVARBINARY(1000000))";
+    private static final String CREATION_QUERY_WITH_WAS_GENERATED_BOARD = "CREATE TABLE IF NOT EXISTS BOARDS_WITH_WAS_GENERATED_BOARD ([name] VARCHAR(255) PRIMARY KEY, [content] LONGVARBINARY(1000000), [wasGenerated] LONGVARBINARY(8100))";
     private static final String READ_QUERY = "SELECT * FROM BOARDS WHERE [name]=?";
+    private static final String READ_QUERY_WITH_WAS_GENERATED_BOARD = "SELECT * FROM BOARDS_WITH_WAS_GENERATED_BOARD WHERE [name]=?";
     private static final String WRITE_QUERY = "INSERT INTO BOARDS([name], [content]) VALUES(?, ?)";
+    private static final String WRITE_QUERY_WITH_WAS_GENERATED_BOARD = "INSERT INTO BOARDS_WITH_WAS_GENERATED_BOARD([name], [content], [wasGenerated]) VALUES(?, ?, ?)";
     private static final String DELETE_QUERY = "DELETE FROM BOARDS WHERE [name]=?";
+    private static final String DELETE_QUERY_WITH_WAS_GENERATED_BOARD = "DELETE FROM BOARDS_WITH_WAS_GENERATED_BOARD WHERE [name]=?";
 
-    private ByteArrayOutputStream baos;
-    private ObjectOutputStream oos;
-    private ByteArrayInputStream bais;
-    private ObjectInputStream ois;
 
     private Connection conn;
     private Statement stat;
@@ -51,19 +51,26 @@ public class JdbcSudokuBoardDao extends AbstractDao<SudokuBoard>{
         this.boardName = boardName;
     }
 
+    public JdbcSudokuBoardDao(final String boardName, boolean[][] wasGenerated) throws ApplicationException {
+        if (boardName == null) {
+            throw new DaoException(DaoException.NULL_NAME);
+        }
+        try {
+            conn = DriverManager.getConnection(DB_URL);
+            stat = conn.createStatement();
+            stat.execute(CREATION_QUERY_WITH_WAS_GENERATED_BOARD);
+        } catch (SQLException se) {
+            throw new DaoException(DaoException.SQL_ERROR);
+        }
+        this.boardName = boardName;
+        this.wasGenerated = wasGenerated;
+    }
+
     @SuppressWarnings("Duplicates")
     @Override
-    public void close() throws SQLException, IOException {
+    public void close() throws SQLException {
         conn.close();
         stat.close();
-        if (baos != null) {
-            baos.close();
-            oos.close();
-        }
-        if (bais != null) {
-            bais.close();
-            ois.close();
-        }
     }
 
     @Override
@@ -74,19 +81,42 @@ public class JdbcSudokuBoardDao extends AbstractDao<SudokuBoard>{
     @SuppressWarnings("Duplicates")
     @Override
     public SudokuBoard readEx() throws DaoException {
-        try (PreparedStatement pstmt = conn
-                .prepareStatement(READ_QUERY)) {
-            pstmt.setString(1, boardName);
-            ResultSet rs = pstmt.executeQuery();
-            byte[] st = (byte[]) rs.getObject(2);
-
-            if (bais == null) {
-                bais = new ByteArrayInputStream(st);
-                ois = new ObjectInputStream(bais);
+        try  {
+            SudokuBoard sudokuBoard;
+            PreparedStatement pstmt;
+            byte[] st;
+            if (wasGenerated == null) {
+                pstmt = conn.prepareStatement(READ_QUERY);
+                pstmt.setString(1, boardName);
+                ResultSet rs = pstmt.executeQuery();
+                st = (byte[]) rs.getObject(2);
+                rs.close();
+                ByteArrayInputStream  bais = new ByteArrayInputStream(st);
+                ObjectInputStream  ois = new ObjectInputStream(bais);
+                pstmt.close();
+                sudokuBoard = (SudokuBoard) ois.readObject();
+                bais.close();
+                ois.close();
+            } else {
+                pstmt = conn.prepareStatement(READ_QUERY_WITH_WAS_GENERATED_BOARD);
+                pstmt.setString(1, boardName);
+                ResultSet rs = pstmt.executeQuery();
+                st = (byte[]) rs.getObject(2);
+                byte[] wasGeneratedByte = (byte[]) rs.getObject(3);
+                rs.close();
+                ByteArrayInputStream  bais1 = new ByteArrayInputStream(st);
+                ObjectInputStream  ois1 = new ObjectInputStream(bais1);
+                ByteArrayInputStream  bais2 = new ByteArrayInputStream(wasGeneratedByte);
+                ObjectInputStream  ois2 = new ObjectInputStream(bais2);
+                pstmt.close();
+                wasGenerated = (boolean[][]) ois2.readObject();
+                sudokuBoard = (SudokuBoard) ois1.readObject();
+                bais1.close();
+                bais2.close();
+                ois1.close();
+                ois2.close();
             }
-            rs.close();
-            return (SudokuBoard) ois.readObject();
-
+            return sudokuBoard;
         } catch (SQLException se) {
             se.printStackTrace();
             throw new DaoException(DaoException.SQL_ERROR);
@@ -102,17 +132,42 @@ public class JdbcSudokuBoardDao extends AbstractDao<SudokuBoard>{
     @SuppressWarnings("Duplicates")
     @Override
     public SudokuBoard read() {
-        try (PreparedStatement pstmt = conn
-                .prepareStatement(READ_QUERY)) {
-            pstmt.setString(1, boardName);
-            ResultSet rs = pstmt.executeQuery();
-            byte[] st = (byte[]) rs.getObject(1);
-            if (bais == null) {
-                bais = new ByteArrayInputStream(st);
-                ois = new ObjectInputStream(bais);
+        try  {
+            SudokuBoard sudokuBoard;
+            PreparedStatement pstmt;
+            byte[] st;
+            if (wasGenerated == null) {
+                pstmt = conn.prepareStatement(READ_QUERY);
+                pstmt.setString(1, boardName);
+                ResultSet rs = pstmt.executeQuery();
+                st = (byte[]) rs.getObject(2);
+                rs.close();
+                ByteArrayInputStream  bais = new ByteArrayInputStream(st);
+                ObjectInputStream  ois = new ObjectInputStream(bais);
+                pstmt.close();
+                sudokuBoard = (SudokuBoard) ois.readObject();
+                bais.close();
+                ois.close();
+            } else {
+                pstmt = conn.prepareStatement(READ_QUERY_WITH_WAS_GENERATED_BOARD);
+                pstmt.setString(1, boardName);
+                ResultSet rs = pstmt.executeQuery();
+                st = (byte[]) rs.getObject(2);
+                byte[] wasGeneratedByte = (byte[]) rs.getObject(3);
+                rs.close();
+                ByteArrayInputStream  bais1 = new ByteArrayInputStream(st);
+                ObjectInputStream  ois1 = new ObjectInputStream(bais1);
+                ByteArrayInputStream  bais2 = new ByteArrayInputStream(wasGeneratedByte);
+                ObjectInputStream  ois2 = new ObjectInputStream(bais2);
+                pstmt.close();
+                wasGenerated = (boolean[][]) ois2.readObject();
+                sudokuBoard = (SudokuBoard) ois1.readObject();
+                bais1.close();
+                bais2.close();
+                ois1.close();
+                ois2.close();
             }
-            rs.close();
-            return (SudokuBoard) ois.readObject();
+            return sudokuBoard;
         } catch (SQLException se) {
             logger.log(SEVERE, getDaoMessage(DaoException.SQL_ERROR), se);
         } catch (IOException ioex) {
@@ -131,17 +186,38 @@ public class JdbcSudokuBoardDao extends AbstractDao<SudokuBoard>{
         if (sudokuBoard == null) {
             throw new DaoException(DaoException.NULL_BOARD);
         }
-        try (PreparedStatement pstmt = conn
-                .prepareStatement(WRITE_QUERY)) {
-            if (baos == null) {
-                baos = new ByteArrayOutputStream();
-                oos = new ObjectOutputStream(baos);
+        try  {
+            PreparedStatement pstmt;
+            if (wasGenerated == null) {
+                pstmt = conn.prepareStatement(WRITE_QUERY);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ObjectOutputStream oos = new ObjectOutputStream(baos);
+                oos.writeObject(sudokuBoard);
+                byte[] sudokuBoardAsBytes = baos.toByteArray();
+                pstmt.setString(1, boardName);
+                pstmt.setBytes(2, sudokuBoardAsBytes);
+                pstmt.executeUpdate();
+                baos.close();
+                oos.close();
+            } else {
+                pstmt = conn.prepareStatement(WRITE_QUERY_WITH_WAS_GENERATED_BOARD);
+                ByteArrayOutputStream baos1 = new ByteArrayOutputStream();
+                ObjectOutputStream oos1 = new ObjectOutputStream(baos1);
+                oos1.writeObject(sudokuBoard);
+                byte[] sudokuBoardAsBytes = baos1.toByteArray();
+                ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
+                ObjectOutputStream oos2 = new ObjectOutputStream(baos2);
+                oos2.writeObject(wasGenerated);
+                byte[] wasGeneratedAsBytes = baos2.toByteArray();
+                pstmt.setString(1, boardName);
+                pstmt.setBytes(2, sudokuBoardAsBytes);
+                pstmt.setBytes(3, wasGeneratedAsBytes);
+                pstmt.executeUpdate();
+                oos1.close();
+                oos2.close();
+                baos1.close();
+                baos2.close();
             }
-            oos.writeObject(sudokuBoard);
-            byte[] sudokuBoardAsBytes = baos.toByteArray();
-            pstmt.setString(1, boardName);
-            pstmt.setBytes(2, sudokuBoardAsBytes);
-            pstmt.executeUpdate();
         } catch (SQLException se) {
             se.printStackTrace();
             throw new DaoException(DaoException.SQL_ERROR);
@@ -157,18 +233,38 @@ public class JdbcSudokuBoardDao extends AbstractDao<SudokuBoard>{
             logger.log(SEVERE, getDaoMessage(DaoException.NULL_BOARD));
             return;
         }
-        try (PreparedStatement pstmt = conn
-                .prepareStatement(WRITE_QUERY)) {
-            if (baos == null) {
-                baos = new ByteArrayOutputStream();
-                oos = new ObjectOutputStream(baos);
+        try  {
+            PreparedStatement pstmt;
+            if (wasGenerated == null) {
+                pstmt = conn.prepareStatement(WRITE_QUERY);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ObjectOutputStream oos = new ObjectOutputStream(baos);
+                oos.writeObject(sudokuBoard);
+                byte[] sudokuBoardAsBytes = baos.toByteArray();
+                pstmt.setString(1, boardName);
+                pstmt.setBytes(2, sudokuBoardAsBytes);
+                pstmt.executeUpdate();
+                baos.close();
+                oos.close();
+            } else {
+                pstmt = conn.prepareStatement(WRITE_QUERY_WITH_WAS_GENERATED_BOARD);
+                ByteArrayOutputStream baos1 = new ByteArrayOutputStream();
+                ObjectOutputStream oos1 = new ObjectOutputStream(baos1);
+                oos1.writeObject(sudokuBoard);
+                byte[] sudokuBoardAsBytes = baos1.toByteArray();
+                ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
+                ObjectOutputStream oos2 = new ObjectOutputStream(baos2);
+                oos2.writeObject(wasGenerated);
+                byte[] wasGeneratedAsBytes = baos2.toByteArray();
+                pstmt.setString(1, boardName);
+                pstmt.setBytes(2, sudokuBoardAsBytes);
+                pstmt.setBytes(3, wasGeneratedAsBytes);
+                pstmt.executeUpdate();
+                oos1.close();
+                oos2.close();
+                baos1.close();
+                baos2.close();
             }
-            oos.writeObject(sudokuBoard);
-            byte[] sudokuBoardAsBytes = baos.toByteArray();
-            ByteArrayInputStream bais = new ByteArrayInputStream(sudokuBoardAsBytes);
-            pstmt.setString(1, boardName);
-            pstmt.setBinaryStream(2, bais, sudokuBoardAsBytes.length);
-            pstmt.executeUpdate();
         } catch (SQLException se) {
             logger.log(SEVERE, getDaoMessage(DaoException.SQL_ERROR), se);
         } catch (IOException ioex) {
@@ -178,10 +274,17 @@ public class JdbcSudokuBoardDao extends AbstractDao<SudokuBoard>{
 
     @SuppressWarnings("Duplicates")
     public void delete() {
-        try (PreparedStatement stmt=
-                     conn.prepareStatement(DELETE_QUERY)  ) {
+        try {
+            PreparedStatement stmt;
+            if (wasGenerated == null) {
+                stmt = conn.prepareStatement(DELETE_QUERY);
+
+            } else {
+                stmt = conn.prepareStatement(DELETE_QUERY_WITH_WAS_GENERATED_BOARD);
+            }
             stmt.setString(1, boardName);
             stmt.executeUpdate();
+
         } catch (SQLException se) {
             logger.log(SEVERE, getDaoMessage(DaoException.SQL_ERROR), se);
         }
@@ -189,10 +292,17 @@ public class JdbcSudokuBoardDao extends AbstractDao<SudokuBoard>{
 
     @SuppressWarnings("Duplicates")
     public void deleteEx() throws DaoException {
-        try (PreparedStatement stmt=
-                     conn.prepareStatement(DELETE_QUERY)  ) {
+        try {
+            PreparedStatement stmt;
+            if (wasGenerated == null) {
+                stmt = conn.prepareStatement(DELETE_QUERY);
+
+            } else {
+                stmt = conn.prepareStatement(DELETE_QUERY_WITH_WAS_GENERATED_BOARD);
+            }
             stmt.setString(1, boardName);
             stmt.executeUpdate();
+
         } catch (SQLException se) {
             throw new DaoException(DaoException.SQL_ERROR);
         }

@@ -9,6 +9,7 @@ import pl.compprog.solvers.SudokuSolver;
 import pl.compprog.sudoku.SudokuBoard;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -74,6 +75,35 @@ class FileSudokuBoardDaoTest {
             dao.writeEx(sudokuBoard1);
             SudokuBoard sudokuBoard2 = dao.readEx();
             assertEquals(sudokuBoard1, sudokuBoard2);
+        }
+        catch (ApplicationException | IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Test
+    public void readAndWriteFileWithWasGeneratedTest()
+    {
+        SudokuBoard sudokuBoard1 = new SudokuBoard();
+        SudokuSolver solver = new BacktrackingSudokuSolver();
+        solver.solve(sudokuBoard1);
+        boolean[][] wasGenerated1 = new boolean[9][9];
+        for (int i = 0; i < wasGenerated1.length; i++) {
+            for (int j  = 0; j < wasGenerated1[0].length; j++) {
+                wasGenerated1[i][j] = true;
+            }
+        }
+        logger.log(Level.INFO, sudokuBoard1.toString());
+        SudokuBoardDaoFactory sudokuBoardDaoFactory = new SudokuBoardDaoFactory();
+        try(FileSudokuBoardDao dao = (FileSudokuBoardDao) sudokuBoardDaoFactory.getFileDao("sudoku.ser", wasGenerated1)) {
+            dao.write(sudokuBoard1);
+            SudokuBoard sudokuBoard2 = dao.readEx();
+            boolean[][] wasGenerated2 = dao.getWasGenerated();
+            assertEquals(sudokuBoard1, sudokuBoard2);
+            assertEquals(wasGenerated1.length, wasGenerated2.length);
+            for (int i = 0; i < wasGenerated1.length; i++) {
+                assertArrayEquals(wasGenerated1[i], wasGenerated2[i]);
+            }
         }
         catch (ApplicationException | IOException ex) {
             ex.printStackTrace();

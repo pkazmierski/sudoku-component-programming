@@ -40,7 +40,7 @@ import java.util.logging.Logger;
 
 
 public class MainView implements Initializable {
-    private final String WAS_GENERATED_FILENAME = "wasGenerated";
+
     public Button verifyButton;
     public MenuItem loadMenuItem;
     public MenuItem saveMenuItem;
@@ -163,48 +163,29 @@ public class MainView implements Initializable {
     }
 
     public void loadAction(ActionEvent actionEvent) {
-
         SudokuBoardDaoFactory sudokuBoardDaoFactory = new SudokuBoardDaoFactory();
         File boardFile = loadFileChooser.showOpenDialog(stage);
-
         if (boardFile != null) {
-            String boardFilename = boardFile.getName();
-            String generatedPath = boardFile.getParentFile() + "/" + WAS_GENERATED_FILENAME + "_"
-                    + boardFilename.substring(0, boardFilename.length() - 4) + ".ser";
-            if (Files.exists(Paths.get(generatedPath))) {
-                try (FileSudokuBoardDao dao =
-                             (FileSudokuBoardDao) sudokuBoardDaoFactory.getFileDao(boardFile.getAbsolutePath());
-                     FileInputStream fis = new FileInputStream(generatedPath);
-                     ObjectInputStream ois = new ObjectInputStream(fis)) {
-                    SudokuBoard tempBoard = dao.readEx();
-                    wasGenerated = (boolean[][]) ois.readObject();
-                    reinitializeBoardLoading(tempBoard);
-
-                } catch (DaoException | IOException ex) {
-                    logger.log(Level.SEVERE, messagesBundle.getString(DaoException.OPEN_ERROR), ex);
-                } catch (ClassNotFoundException cnfex) {
-                    logger.log(Level.SEVERE, messagesBundle.getString(DaoException.INVALID_CAST), cnfex);
-                } catch (ApplicationException aex) {
-                    logger.log(Level.SEVERE, messagesBundle.getString(ApplicationException.RESOURCE_BUNDLE_IS_NULL), aex);
-                }
+            try (FileSudokuBoardDao dao =
+                         (FileSudokuBoardDao) sudokuBoardDaoFactory.getFileDao(boardFile.getAbsolutePath(), wasGenerated)) {
+                SudokuBoard tempBoard = dao.readEx();
+                wasGenerated = dao.getWasGenerated();
+                reinitializeBoardLoading(tempBoard);
+            } catch (DaoException | IOException ex) {
+                logger.log(Level.SEVERE, messagesBundle.getString(DaoException.OPEN_ERROR), ex);
+            }catch (ApplicationException aex) {
+                logger.log(Level.SEVERE, messagesBundle.getString(ApplicationException.RESOURCE_BUNDLE_IS_NULL), aex);
             }
         }
     }
 
     public void saveAction(ActionEvent actionEvent) {
-
         SudokuBoardDaoFactory sudokuBoardDaoFactory = new SudokuBoardDaoFactory();
         File boardFile = saveFileChooser.showSaveDialog(stage);
         if (boardFile != null) {
-            String boardFilename = boardFile.getName();
-            File generatedFile = new File(boardFile.getParentFile() + "/" + WAS_GENERATED_FILENAME + "_"
-                    + boardFilename.substring(0, boardFilename.length() - 4)+ ".ser");
             try (FileSudokuBoardDao dao =
-                         (FileSudokuBoardDao) sudokuBoardDaoFactory.getFileDao(boardFile.getAbsolutePath());
-                 FileOutputStream fos = new FileOutputStream(generatedFile);
-                 ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+                         (FileSudokuBoardDao) sudokuBoardDaoFactory.getFileDao(boardFile.getAbsolutePath(), wasGenerated)) {
                 dao.writeEx(board);
-                oos.writeObject(wasGenerated);
             } catch (DaoException | IOException ex) {
                 logger.log(Level.SEVERE, messagesBundle.getString(DaoException.NULL_FILE), ex);
             } catch (ApplicationException aex) {

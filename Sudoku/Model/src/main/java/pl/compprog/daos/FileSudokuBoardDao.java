@@ -58,18 +58,30 @@ public class FileSudokuBoardDao extends AbstractDao<SudokuBoard> {
         filename = filename1;
     }
 
+    public FileSudokuBoardDao(final String filename1, boolean wasGenerated[][]) throws ApplicationException {
+        if (filename1 == null) {
+            throw new DaoException(DaoException.NULL_NAME);
+        }
+        filename = filename1;
+        this.wasGenerated = wasGenerated;
+    }
+
     /**
      * Reads SudokuBoard object from a file
      * and returns it.
      *
      *@return SudokuBoard object read form the file
      */
+    @SuppressWarnings("Duplicates")
     @Override
     public final SudokuBoard readEx() throws DaoException {
         try {
             if (fis == null) {
                 fis = new FileInputStream(filename);
                 ois = new ObjectInputStream(fis);
+            }
+            if (wasGenerated != null) {
+                wasGenerated = (boolean[][]) ois.readObject();
             }
             return (SudokuBoard) ois.readObject();
         } catch (IOException ioex) {
@@ -79,12 +91,16 @@ public class FileSudokuBoardDao extends AbstractDao<SudokuBoard> {
         }
     }
 
+    @SuppressWarnings("Duplicates")
     @Override
     public SudokuBoard read() {
         try {
             if (fis == null) {
                 fis = new FileInputStream(filename);
                 ois = new ObjectInputStream(fis);
+            }
+            if (wasGenerated != null) {
+                wasGenerated = (boolean[][]) ois.readObject();
             }
             return (SudokuBoard) ois.readObject();
         } catch (IOException ioex) {
@@ -101,6 +117,7 @@ public class FileSudokuBoardDao extends AbstractDao<SudokuBoard> {
      *
      * @param obj SudokuBoard object to be written
      */
+    @SuppressWarnings("Duplicates")
     @Override
     public final void writeEx(final SudokuBoard obj) throws DaoException {
         if (obj == null) {
@@ -112,12 +129,16 @@ public class FileSudokuBoardDao extends AbstractDao<SudokuBoard> {
                 fos = new FileOutputStream(file);
                 oos = new ObjectOutputStream(fos);
             }
+            if (wasGenerated != null) {
+                oos.writeObject(wasGenerated);
+            }
             oos.writeObject(obj);
         } catch (IOException ioex) {
             throw new DaoException(DaoException.OPEN_ERROR, ioex);
         }
     }
 
+    @SuppressWarnings("Duplicates")
     @Override
     public void write(SudokuBoard obj) {
         if (obj == null) {
@@ -129,6 +150,9 @@ public class FileSudokuBoardDao extends AbstractDao<SudokuBoard> {
             if (fos == null) {
                 fos = new FileOutputStream(file);
                 oos = new ObjectOutputStream(fos);
+            }
+            if (wasGenerated != null) {
+                oos.writeObject(wasGenerated);
             }
             oos.writeObject(obj);
         } catch (IOException ioex) {
