@@ -11,6 +11,7 @@ import pl.compprog.daos.SudokuBoardDaoFactory;
 import pl.compprog.exceptions.ApplicationException;
 import pl.compprog.exceptions.DaoException;
 import pl.compprog.logs.FileAndConsoleLoggerFactory;
+import pl.compprog.sudoku.SudokuBoard;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,10 +41,20 @@ public class DbSaveDialogue implements Initializable {
 
     private enum Language {ENGLISH, POLISH}
 
+    private boolean isBoardEmpty(SudokuBoard boardToTest) {
+        for(int i = 0; i < 9; i++) {
+            for(int j = 0; j < 9; j++) {
+                if(boardToTest.get(i, j) != 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
     public void saveToDb(ActionEvent actionEvent) {
         SudokuBoardDaoFactory sudokuBoardDaoFactory = new SudokuBoardDaoFactory();
-        if (!saveNameField.getText().equals("")) {
+        if (!saveNameField.getText().equals("") && !isBoardEmpty(MainView.getSudokuBoard())) {
             try (JdbcSudokuBoardDao dao = (JdbcSudokuBoardDao) sudokuBoardDaoFactory.getDatabaseDao(saveNameField.getText(), MainView.getWasGenerated())) {
                 dao.writeEx(MainView.getSudokuBoard());
             } catch (DaoException | SQLException ex) {
