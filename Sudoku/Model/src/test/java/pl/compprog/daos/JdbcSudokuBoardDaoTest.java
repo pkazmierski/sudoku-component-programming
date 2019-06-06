@@ -26,18 +26,6 @@ class JdbcSudokuBoardDaoTest {
 
 
     @Test
-    public void testReadFromNonExistingBoard() {
-        boolean[][] temp = new boolean[9][9];
-        try (JdbcSudokuBoardDao dao = new JdbcSudokuBoardDao("nonExistingBoard!@#$%^&%^%*&^", temp))
-        {
-            assertThrows(DaoException.class, dao::readEx);
-        } catch (ApplicationException | SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-
-    @Test
     public void testWriteNullBoard() {
         boolean[][] temp = new boolean[9][9];
         try (JdbcSudokuBoardDao dao = new JdbcSudokuBoardDao("nonExistingBoard!@#$%^&%^%*&^", temp))

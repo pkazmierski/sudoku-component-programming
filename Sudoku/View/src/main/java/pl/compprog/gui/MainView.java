@@ -90,6 +90,7 @@ public class MainView implements Initializable {
         me = this;
     }
 
+    @SuppressWarnings("Duplicates")
     public void loadFromDbAction(ActionEvent actionEvent) throws IOException {
         URL location = getClass().getResource("/pl/compprog/gui/DbLoadDialogue.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(location);
@@ -111,6 +112,7 @@ public class MainView implements Initializable {
         newWindow.show();
     }
 
+    @SuppressWarnings("Duplicates")
     public void saveToDbAction(ActionEvent actionEvent) throws IOException {
         URL location = getClass().getResource("/pl/compprog/gui/DbSaveDialogue.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(location);

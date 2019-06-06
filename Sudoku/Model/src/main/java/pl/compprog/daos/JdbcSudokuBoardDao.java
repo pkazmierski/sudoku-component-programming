@@ -31,7 +31,7 @@ public class JdbcSudokuBoardDao extends AbstractDao<SudokuBoard>{
             ")";
 
     private static final String READ_ALL_BOARDS = "SELECT * FROM BOARDS";
-    private static final String READ_QUERY_FIELD = "SELECT * FROM FIELDS WHERE [boardName]=? AND [x]=? AND [y]=?";
+    private static final String READ_QUERY_FIELD = "SELECT * FROM FIELDS WHERE [boardName]=?";
     private static final String WRITE_QUERY_BOARD = "INSERT INTO BOARDS([name], [creationDate]) VALUES(?, strftime('%d/%m/%Y %H:%M:%S', 'now', 'localtime'))";
     private static final String WRITE_QUERY_FIELD = "INSERT INTO FIELDS([boardName], [x], [y], [value], [wasGenerated]) VALUES(?, ?, ?, ?, ?)";
     private static final String DELETE_QUERY_BOARD = "DELETE FROM BOARDS WHERE [name]=?";
@@ -116,16 +116,14 @@ public class JdbcSudokuBoardDao extends AbstractDao<SudokuBoard>{
     public SudokuBoard readEx() throws DaoException {
         try  {
             SudokuBoard sudokuBoard = new SudokuBoard();
-            for (int x = 0; x < SudokuBoard.SIZE_OF_SUDOKU; x++) {
-                for (int y = 0; y < SudokuBoard.SIZE_OF_SUDOKU; y++) {
-                    pstmt = conn.prepareStatement(READ_QUERY_FIELD);
-                    pstmt.setString(1, boardName);
-                    pstmt.setInt(2, x);
-                    pstmt.setInt(3, y);
-                    rs = pstmt.executeQuery();
-                    sudokuBoard.set(x, y, rs.getInt(4));
-                    wasGenerated[y][x] = rs.getInt(5) == 1;
-                }
+            pstmt = conn.prepareStatement(READ_QUERY_FIELD);
+            pstmt.setString(1, boardName);
+            rs = pstmt.executeQuery();
+            while(rs.next()) {
+                int x = rs.getInt(2);
+                int y = rs.getInt(3);
+                sudokuBoard.unsafeSet(x, y, rs.getInt(4));
+                wasGenerated[y][x] = rs.getInt(5) == 1;
             }
             return sudokuBoard;
         } catch (SQLException se) {
@@ -145,7 +143,7 @@ public class JdbcSudokuBoardDao extends AbstractDao<SudokuBoard>{
                     pstmt.setInt(2, x);
                     pstmt.setInt(3, y);
                     rs = pstmt.executeQuery();
-                    sudokuBoard.set(x, y, rs.getInt(4));
+                    sudokuBoard.unsafeSet(x, y, rs.getInt(4));
                     wasGenerated[y][x] = rs.getInt(5) == 1;
                 }
             }

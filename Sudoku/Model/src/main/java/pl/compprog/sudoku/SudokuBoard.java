@@ -156,6 +156,10 @@ public class SudokuBoard implements Serializable {
         }
     }
 
+    public final void unsafeSet(final int x, final int y, final int value) {
+        getFieldAt(x, y).setValue(value);
+    }
+
 
     /**
      * Determines whether one can put such number
