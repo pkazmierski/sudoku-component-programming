@@ -63,6 +63,7 @@ public class MainView implements Initializable {
     public MenuItem loadFromDbMenuItem;
     public MenuItem saveToDbMenuItem;
     public Menu dbMenu;
+    public MenuItem deleteFromDbMenuItem;
     private FileChooser saveFileChooser = new FileChooser();
     private FileChooser loadFileChooser = new FileChooser();
     public Stage stage;
@@ -123,6 +124,27 @@ public class MainView implements Initializable {
         // New window (Stage)
         Stage newWindow = new Stage();
         newWindow.setTitle(currentBundle.getString("db_save_dialogue"));
+        newWindow.setScene(secondScene);
+        // Specifies the modality for new window.
+        newWindow.initModality(Modality.WINDOW_MODAL);
+        // Specifies the owner Window (parent) for new window
+        newWindow.initOwner(stage);
+        // Set position of second window, related to primary window.
+        newWindow.setX(stage.getX() + 50);
+        newWindow.setY(stage.getY() + 200);
+        newWindow.show();
+    }
+
+    public void deleteFromDbAction(ActionEvent actionEvent) throws IOException {
+        URL location = getClass().getResource("/pl/compprog/gui/DbDeleteDialogue.fxml");
+        FXMLLoader fxmlLoader = new FXMLLoader(location);
+        fxmlLoader.setResources(ResourceBundle.getBundle("i18n.SudokuBundle", new Locale("en", "EN")));
+        Parent root = fxmlLoader.load();
+
+        Scene secondScene = new Scene(root);
+        // New window (Stage)
+        Stage newWindow = new Stage();
+        newWindow.setTitle(currentBundle.getString("db_delete_dialogue"));
         newWindow.setScene(secondScene);
         // Specifies the modality for new window.
         newWindow.initModality(Modality.WINDOW_MODAL);
@@ -362,6 +384,7 @@ public class MainView implements Initializable {
         stage.setTitle(currentBundle.getString("sudoku_game"));
         loadFromDbMenuItem.setText(currentBundle.getString("load"));
         saveToDbMenuItem.setText(currentBundle.getString("save"));
+        deleteFromDbMenuItem.setText(currentBundle.getString("delete"));
     }
 
     public void changeToPolishAction(ActionEvent actionEvent) {

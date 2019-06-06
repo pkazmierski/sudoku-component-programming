@@ -41,6 +41,7 @@
               <items>
                 <MenuItem fx:id="loadFromDbMenuItem" mnemonicParsing="false" onAction="#loadFromDbAction" text="%load" />
                   <MenuItem fx:id="saveToDbMenuItem" mnemonicParsing="false" onAction="#saveToDbAction" text="%save" />
+                  <MenuItem fx:id="deleteFromDbMenuItem" mnemonicParsing="false" onAction="#deleteFromDbAction" text="%delete" />
               </items>
             </Menu>
             </MenuBar>
