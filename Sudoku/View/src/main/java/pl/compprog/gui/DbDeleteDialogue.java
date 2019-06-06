@@ -44,8 +44,8 @@ public class DbDeleteDialogue implements Initializable {
             );
         }
 
-        dbComboBoxList.setPromptText(MainView.me.getCurrentBundle().getString("choose_delete"));
-        deleteDbButton.setText(MainView.me.getCurrentBundle().getString("delete"));
+        dbComboBoxList.setPromptText(MainView.getInstance().getCurrentBundle().getString("choose_delete"));
+        deleteDbButton.setText(MainView.getInstance().getCurrentBundle().getString("delete"));
     }
 
     public void deleteFromDb(ActionEvent actionEvent) {
@@ -53,7 +53,7 @@ public class DbDeleteDialogue implements Initializable {
         if (dbComboBoxList.getValue() != null) {
             String boardName = (String) dbComboBoxList.getValue();
             boardName = boardName.substring(0, boardName.length() - 20);
-            try (JdbcSudokuBoardDao dao = (JdbcSudokuBoardDao) sudokuBoardDaoFactory.getDatabaseDao(boardName, MainView.wasGenerated)) {
+            try (JdbcSudokuBoardDao dao = (JdbcSudokuBoardDao) sudokuBoardDaoFactory.getDatabaseDao(boardName, MainView.getWasGenerated())) {
                 dao.deleteEx();
             } catch (DaoException | SQLException ex) {
                 logger.log(Level.SEVERE, messagesBundle.getString(DaoException.OPEN_ERROR), ex);

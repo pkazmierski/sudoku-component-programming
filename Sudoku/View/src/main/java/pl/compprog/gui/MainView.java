@@ -34,8 +34,6 @@ import pl.compprog.sudoku.SudokuBoard;
 
 import java.io.*;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.ParsePosition;
 import java.util.*;
@@ -66,7 +64,7 @@ public class MainView implements Initializable {
     public MenuItem deleteFromDbMenuItem;
     private FileChooser saveFileChooser = new FileChooser();
     private FileChooser loadFileChooser = new FileChooser();
-    public Stage stage;
+    private Stage stage;
     private Locale englishLocale = new Locale("en", "EN");
     private ResourceBundle englishBundle = ResourceBundle.getBundle("i18n.SudokuBundle", englishLocale);
     private ResourceBundle polishBundle = ResourceBundle.getBundle("i18n.SudokuBundle");
@@ -74,7 +72,7 @@ public class MainView implements Initializable {
     private ResourceBundle englishBundleAuthors = ResourceBundle.getBundle("i18n.authors.AuthorsBundle", englishLocale);
     private ResourceBundle polishBundleAuthors = ResourceBundle.getBundle("i18n.authors.AuthorsBundle");
     private ResourceBundle currentBundleAuthors = englishBundleAuthors;
-    static public SudokuBoard board = new SudokuBoard();
+    private static SudokuBoard board = new SudokuBoard();
     private SudokuSolver solver = new BacktrackingSudokuSolver();
     private Difficulty difficulty;
     private GridPane grid;
@@ -83,12 +81,36 @@ public class MainView implements Initializable {
     private TextField[][] textFields = new TextField[9][9];
     private String currentVerifyButtonKey = "verify";
     private JavaBeanIntegerPropertyBuilder builder = JavaBeanIntegerPropertyBuilder.create();
-    static public boolean[][] wasGenerated = new boolean[9][9];
+    private static boolean[][] wasGenerated = new boolean[9][9];
 
-    static MainView me;
+    private static MainView instance;
 
     public MainView() {
-        me = this;
+        if (instance == null) {
+            instance = this;
+        } else {
+            throw new RuntimeException("MainView already created!");
+        }
+    }
+
+    public static MainView getInstance() {
+        return instance;
+    }
+
+    public static boolean[][] getWasGenerated() {
+        return wasGenerated;
+    }
+
+    public static void setWasGenerated(boolean[][] wasGenerated) {
+        MainView.wasGenerated = wasGenerated;
+    }
+
+    public static SudokuBoard getSudokuBoard() {
+        return board;
+    }
+
+    public static void setWasGenerated(SudokuBoard board) {
+        MainView.board = board;
     }
 
     @SuppressWarnings("Duplicates")
@@ -135,12 +157,12 @@ public class MainView implements Initializable {
         newWindow.show();
     }
 
+    @SuppressWarnings("Duplicates")
     public void deleteFromDbAction(ActionEvent actionEvent) throws IOException {
         URL location = getClass().getResource("/pl/compprog/gui/DbDeleteDialogue.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(location);
         fxmlLoader.setResources(ResourceBundle.getBundle("i18n.SudokuBundle", new Locale("en", "EN")));
         Parent root = fxmlLoader.load();
-
         Scene secondScene = new Scene(root);
         // New window (Stage)
         Stage newWindow = new Stage();

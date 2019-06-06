@@ -29,8 +29,9 @@ public class DbLoadDialogue implements Initializable {
     public Button loadDbButton;
     private final Logger logger = FileAndConsoleLoggerFactory.getConfiguredLogger(DbSaveDialogue.class.getName());
     private final ResourceBundle messagesBundle = ResourceBundle.getBundle("pl.compprog.messages");
-    List<String[]> allBoards;
+    private List<String[]> allBoards;
 
+    @SuppressWarnings("Duplicates")
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -47,8 +48,8 @@ public class DbLoadDialogue implements Initializable {
             );
         }
 
-        dbComboBoxList.setPromptText(MainView.me.getCurrentBundle().getString("choose_save"));
-        loadDbButton.setText(MainView.me.getCurrentBundle().getString("load"));
+        dbComboBoxList.setPromptText(MainView.getInstance().getCurrentBundle().getString("choose_save"));
+        loadDbButton.setText(MainView.getInstance().getCurrentBundle().getString("load"));
     }
 
     public void loadFromDb(ActionEvent actionEvent) {
@@ -56,10 +57,10 @@ public class DbLoadDialogue implements Initializable {
         if (dbComboBoxList.getValue() != null) {
             String boardName = (String) dbComboBoxList.getValue();
             boardName = boardName.substring(0, boardName.length() - 20);
-            try (JdbcSudokuBoardDao dao = (JdbcSudokuBoardDao) sudokuBoardDaoFactory.getDatabaseDao(boardName, MainView.wasGenerated)) {
+            try (JdbcSudokuBoardDao dao = (JdbcSudokuBoardDao) sudokuBoardDaoFactory.getDatabaseDao(boardName, MainView.getWasGenerated())) {
                 SudokuBoard tempBoard = dao.readEx();
-                MainView.wasGenerated = dao.getWasGenerated();
-                MainApp.me.getController().reinitializeBoardLoading(tempBoard);
+                MainView.setWasGenerated(dao.getWasGenerated());
+                MainApp.getInstance().getController().reinitializeBoardLoading(tempBoard);
             } catch (DaoException | SQLException ex) {
                 logger.log(Level.SEVERE, messagesBundle.getString(DaoException.OPEN_ERROR), ex);
             }catch (ApplicationException aex) {

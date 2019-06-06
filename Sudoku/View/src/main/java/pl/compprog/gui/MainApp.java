@@ -13,13 +13,22 @@ import java.util.ResourceBundle;
 
 
 public class MainApp extends Application {
-    public static MainApp me;
+    private static MainApp instance;
     private MainView controller;
 
     public MainApp() {
-        me = this;
+        if (instance == null) {
+            instance = this;
+        } else {
+            throw new RuntimeException("MainApp already created!");
+        }
     }
 
+    public static MainApp getInstance() {
+        return instance;
+    }
+
+    @SuppressWarnings("Duplicates")
     @Override
     public void start(Stage stage) throws Exception {
         URL location = getClass().getResource("/pl/compprog/gui/MainView.fxml");

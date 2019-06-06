@@ -34,8 +34,8 @@ public class DbSaveDialogue implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        saveNameField.setPromptText(MainView.me.getCurrentBundle().getString("save_name"));
-        saveDbButton.setText(MainView.me.getCurrentBundle().getString("save"));
+        saveNameField.setPromptText(MainView.getInstance().getCurrentBundle().getString("save_name"));
+        saveDbButton.setText(MainView.getInstance().getCurrentBundle().getString("save"));
     }
 
     private enum Language {ENGLISH, POLISH}
@@ -44,8 +44,8 @@ public class DbSaveDialogue implements Initializable {
     public void saveToDb(ActionEvent actionEvent) {
         SudokuBoardDaoFactory sudokuBoardDaoFactory = new SudokuBoardDaoFactory();
         if (!saveNameField.getText().equals("")) {
-            try (JdbcSudokuBoardDao dao = (JdbcSudokuBoardDao) sudokuBoardDaoFactory.getDatabaseDao(saveNameField.getText(), MainView.wasGenerated)) {
-                dao.writeEx(MainView.board);
+            try (JdbcSudokuBoardDao dao = (JdbcSudokuBoardDao) sudokuBoardDaoFactory.getDatabaseDao(saveNameField.getText(), MainView.getWasGenerated())) {
+                dao.writeEx(MainView.getSudokuBoard());
             } catch (DaoException | SQLException ex) {
                 logger.log(Level.SEVERE, messagesBundle.getString(DaoException.NULL_FILE), ex);
             } catch (ApplicationException aex) {
