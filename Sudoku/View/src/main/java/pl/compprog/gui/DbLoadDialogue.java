@@ -41,8 +41,9 @@ public class DbLoadDialogue implements Initializable {
 
         for(int i = 0; i < allBoards.size(); i++) {
             String boardName = allBoards.get(i)[0];
+            String date = allBoards.get(i)[1];
             dbComboBoxList.getItems().addAll(
-                    boardName
+                    boardName + ' ' + date
             );
         }
 
@@ -53,7 +54,9 @@ public class DbLoadDialogue implements Initializable {
     public void loadFromDb(ActionEvent actionEvent) {
         SudokuBoardDaoFactory sudokuBoardDaoFactory = new SudokuBoardDaoFactory();
         if (dbComboBoxList.getValue() != null) {
-            try (JdbcSudokuBoardDao dao = (JdbcSudokuBoardDao) sudokuBoardDaoFactory.getDatabaseDao((String) dbComboBoxList.getValue(), MainView.wasGenerated)) {
+            String boardName = (String) dbComboBoxList.getValue();
+            boardName = boardName.substring(0, boardName.length() - 20);
+            try (JdbcSudokuBoardDao dao = (JdbcSudokuBoardDao) sudokuBoardDaoFactory.getDatabaseDao(boardName, MainView.wasGenerated)) {
                 SudokuBoard tempBoard = dao.readEx();
                 MainView.wasGenerated = dao.getWasGenerated();
                 MainApp.me.getController().reinitializeBoardLoading(tempBoard);
