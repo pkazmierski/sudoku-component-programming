@@ -10,7 +10,16 @@ import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+
+
 public class MainApp extends Application {
+    public static MainApp me;
+    private MainView controller;
+
+    public MainApp() {
+        me = this;
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
         URL location = getClass().getResource("/pl/compprog/gui/MainView.fxml");
@@ -18,14 +27,19 @@ public class MainApp extends Application {
         fxmlLoader.setResources(ResourceBundle.getBundle("i18n.SudokuBundle", new Locale("en", "EN")));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
-        stage.setTitle("Sudoku Game");
+        //stage.setTitle("Sudoku Game");
         stage.setScene(scene);
-        MainView controller = fxmlLoader.getController();
+        controller = fxmlLoader.getController();
+        stage.setTitle(controller.getCurrentBundle().getString("sudoku_game"));
         controller.setStage(stage);
         stage.show();
     }
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    public MainView getController() {
+        return controller;
     }
 }

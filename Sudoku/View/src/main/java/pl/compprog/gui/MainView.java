@@ -5,14 +5,18 @@ import javafx.beans.property.adapter.JavaBeanIntegerProperty;
 import javafx.beans.property.adapter.JavaBeanIntegerPropertyBuilder;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import javafx.util.converter.IntegerStringConverter;
@@ -56,9 +60,12 @@ public class MainView implements Initializable {
     public MenuItem polishMenuItem;
     public Label authorsLabel;
     public AnchorPane anchorPane;
+    public MenuItem loadFromDbMenuItem;
+    public MenuItem saveToDbMenuItem;
+    public Menu dbMenu;
     private FileChooser saveFileChooser = new FileChooser();
     private FileChooser loadFileChooser = new FileChooser();
-    private Stage stage;
+    public Stage stage;
     private Locale englishLocale = new Locale("en", "EN");
     private ResourceBundle englishBundle = ResourceBundle.getBundle("i18n.SudokuBundle", englishLocale);
     private ResourceBundle polishBundle = ResourceBundle.getBundle("i18n.SudokuBundle");
@@ -66,7 +73,7 @@ public class MainView implements Initializable {
     private ResourceBundle englishBundleAuthors = ResourceBundle.getBundle("i18n.authors.AuthorsBundle", englishLocale);
     private ResourceBundle polishBundleAuthors = ResourceBundle.getBundle("i18n.authors.AuthorsBundle");
     private ResourceBundle currentBundleAuthors = englishBundleAuthors;
-    private SudokuBoard board = new SudokuBoard();
+    static public SudokuBoard board = new SudokuBoard();
     private SudokuSolver solver = new BacktrackingSudokuSolver();
     private Difficulty difficulty;
     private GridPane grid;
@@ -75,7 +82,55 @@ public class MainView implements Initializable {
     private TextField[][] textFields = new TextField[9][9];
     private String currentVerifyButtonKey = "verify";
     private JavaBeanIntegerPropertyBuilder builder = JavaBeanIntegerPropertyBuilder.create();
-    private boolean[][] wasGenerated = new boolean[9][9];
+    static public boolean[][] wasGenerated = new boolean[9][9];
+
+    static MainView me;
+
+    public MainView() {
+        me = this;
+    }
+
+    public void loadFromDbAction(ActionEvent actionEvent) throws IOException {
+        URL location = getClass().getResource("/pl/compprog/gui/DbLoadDialogue.fxml");
+        FXMLLoader fxmlLoader = new FXMLLoader(location);
+        fxmlLoader.setResources(ResourceBundle.getBundle("i18n.SudokuBundle", new Locale("en", "EN")));
+        Parent root = fxmlLoader.load();
+
+        Scene secondScene = new Scene(root);
+        // New window (Stage)
+        Stage newWindow = new Stage();
+        newWindow.setTitle(currentBundle.getString("db_load_dialogue"));
+        newWindow.setScene(secondScene);
+        // Specifies the modality for new window.
+        newWindow.initModality(Modality.WINDOW_MODAL);
+        // Specifies the owner Window (parent) for new window
+        newWindow.initOwner(stage);
+        // Set position of second window, related to primary window.
+        newWindow.setX(stage.getX() + 50);
+        newWindow.setY(stage.getY() + 200);
+        newWindow.show();
+    }
+
+    public void saveToDbAction(ActionEvent actionEvent) throws IOException {
+        URL location = getClass().getResource("/pl/compprog/gui/DbSaveDialogue.fxml");
+        FXMLLoader fxmlLoader = new FXMLLoader(location);
+        fxmlLoader.setResources(ResourceBundle.getBundle("i18n.SudokuBundle", new Locale("en", "EN")));
+        Parent root = fxmlLoader.load();
+
+        Scene secondScene = new Scene(root);
+        // New window (Stage)
+        Stage newWindow = new Stage();
+        newWindow.setTitle(currentBundle.getString("db_save_dialogue"));
+        newWindow.setScene(secondScene);
+        // Specifies the modality for new window.
+        newWindow.initModality(Modality.WINDOW_MODAL);
+        // Specifies the owner Window (parent) for new window
+        newWindow.initOwner(stage);
+        // Set position of second window, related to primary window.
+        newWindow.setX(stage.getX() + 50);
+        newWindow.setY(stage.getY() + 200);
+        newWindow.show();
+    }
 
     private enum Language {ENGLISH, POLISH}
     private final Logger logger = FileAndConsoleLoggerFactory.getConfiguredLogger(MainView.class.getName());
@@ -145,6 +200,7 @@ public class MainView implements Initializable {
         loadFileChooser.getExtensionFilters().add(extFilter);
         authorsLabel.setText(currentBundleAuthors.getString("authors_university") + ", " +
                 currentBundleAuthors.getString("authors_country"));
+
     }
 
     public void setStage(Stage stage) {
@@ -213,7 +269,7 @@ public class MainView implements Initializable {
     }
 
 
-    private void reinitializeBoardLoading(SudokuBoard tempBoard) {
+    public void reinitializeBoardLoading(SudokuBoard tempBoard) {
         for (int i = 0; i < SudokuBoard.SIZE_OF_SUDOKU; i++) {
             for (int j = 0; j < SudokuBoard.SIZE_OF_SUDOKU; j++) {
                 int value = tempBoard.get(j, i);
@@ -300,6 +356,10 @@ public class MainView implements Initializable {
         polishMenuItem.setText(currentBundle.getString("polish"));
         authorsLabel.setText(currentBundleAuthors.getString("authors_university") + ", " +
                 currentBundleAuthors.getString("authors_country"));
+        dbMenu.setText(currentBundle.getString("database"));
+        stage.setTitle(currentBundle.getString("sudoku_game"));
+        loadFromDbMenuItem.setText(currentBundle.getString("load"));
+        saveToDbMenuItem.setText(currentBundle.getString("save"));
     }
 
     public void changeToPolishAction(ActionEvent actionEvent) {
@@ -308,5 +368,9 @@ public class MainView implements Initializable {
 
     public void changeToEnglishAction(ActionEvent actionEvent) {
         changeLangauge(Language.ENGLISH);
+    }
+
+    public ResourceBundle getCurrentBundle() {
+        return currentBundle;
     }
 }
