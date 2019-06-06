@@ -161,6 +161,7 @@ public class JdbcSudokuBoardDao extends AbstractDao<SudokuBoard>{
             throw new DaoException(DaoException.NULL_BOARD);
         }
         try  {
+            deleteEx();
             pstmt = conn.prepareStatement(WRITE_QUERY_BOARD);
             pstmt.setString(1, boardName);
             pstmt.execute();
@@ -188,6 +189,7 @@ public class JdbcSudokuBoardDao extends AbstractDao<SudokuBoard>{
             return;
         }
         try  {
+            delete();
             pstmt = conn.prepareStatement(WRITE_QUERY_BOARD);
             pstmt.setString(1, boardName);
             pstmt.execute();
